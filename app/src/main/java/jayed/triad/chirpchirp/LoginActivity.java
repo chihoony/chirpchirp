@@ -17,6 +17,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -26,11 +27,18 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.amazonaws.auth.CognitoCachingCredentialsProvider;
 import com.amazonaws.mobileconnectors.cognito.CognitoSyncManager;
+import com.amazonaws.mobileconnectors.lambdainvoker.LambdaFunctionException;
 import com.amazonaws.mobileconnectors.lambdainvoker.LambdaInvokerFactory;
 import com.amazonaws.regions.Regions;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,9 +48,10 @@ import static android.Manifest.permission.READ_CONTACTS;
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
+public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor>{//,MyInterface {
 
-
+    private String jsonResponse;
+    private JsonObject jsonObject;
     /**
      * Id to identity READ_CONTACTS permission request.
      */
@@ -103,23 +112,68 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
-        // Initialize the Amazon Cognito credentials provider
-        CognitoCachingCredentialsProvider credentialsProvider = new CognitoCachingCredentialsProvider(
-                this.getApplicationContext(),
-                "us-east-1:199ef319-9d39-4578-9a1c-3dbce5c88305", // Identity Pool ID
-                Regions.US_EAST_1 // Region
-        );
+//        // Initialize the Amazon Cognito credentials provider
+//        CognitoCachingCredentialsProvider credentialsProvider = new CognitoCachingCredentialsProvider(
+//                this.getApplicationContext(),
+//                "us-east-1:199ef319-9d39-4578-9a1c-3dbce5c88305", // Identity Pool ID
+//                Regions.US_EAST_1 // Region
+//        );
+//
+//        LambdaInvokerFactory factory = new LambdaInvokerFactory(
+//                this.getApplicationContext(),
+//                Regions.US_EAST_1,
+//                credentialsProvider);
+//
+//
+//        final MyInterface myInterface = factory.build(MyInterface.class);
+//
+//        NameInfo nameInfo = new NameInfo("John", "Doe");
+//
+//        // The Lambda function invocation results in a network call
+//        // Make sure it is not called from the main thread
+//        new AsyncTask<NameInfo, Void, String>() {
+//            @Override
+//            protected String doInBackground(NameInfo... params) {
+//                // invoke "echo" method. In case it fails, it will throw a
+//                // LambdaFunctionException.
+//                try {
+//                    return myInterface.echo(params[0]);
+//                } catch (LambdaFunctionException lfe) {
+//                    //Log.e(, "Failed to invoke echo", lfe);
+//                    return null;
+//                }
+//            }
+//
+//            @Override
+//            protected void onPostExecute(String result) {
+//                if (result == null) {
+//                    return;
+//                }
+//
+//                // Do a toast
+//                Toast.makeText(LoginActivity.this, result, Toast.LENGTH_LONG).show();
+//            }
+//        }.execute(nameInfo);
 
-        // Initialize the Cognito Sync client
-        CognitoSyncManager syncClient = new CognitoSyncManager(
-                this.getApplicationContext(),
-                Regions.US_EAST_1, // Region
-                credentialsProvider);
-
-        LambdaInvokerFactory factory = new LambdaInvokerFactory(
-                this.getApplicationContext(),
-                Regions.US_EAST_1,
-                credentialsProvider);
+//        System.out.println("this is runned");
+//
+//        jsonResponse = "{\n" +
+//                "\t\"operation\": \"read\",\n" +
+//                "\t\"TableName\": \"Chirp\",\n" +
+//                "    \"Key\": {\"userId\": \"apple\",\n" +
+//                "    \t\t\"chirpId\": 2}\n" +
+//                "}\n";
+//
+//        System.out.println("THISISCALLED");
+//
+//        Gson gson = new Gson();
+//        JsonElement element = gson.fromJson(jsonResponse, JsonElement.class);
+//        JsonObject jsonObj = element.getAsJsonObject();
+//
+//
+//        String s = echo(jsonObj);
+//
+//        System.out.println(s);
 
     }
 
@@ -201,6 +255,71 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mEmailView.setError(getString(R.string.error_field_required));
             focusView = mEmailView;
             cancel = true;
+
+            // Initialize the Amazon Cognito credentials provider
+            CognitoCachingCredentialsProvider credentialsProvider = new CognitoCachingCredentialsProvider(
+                    this.getApplicationContext(),
+                    "us-east-1:199ef319-9d39-4578-9a1c-3dbce5c88305", // Identity Pool ID
+                    Regions.US_EAST_1 // Region
+            );
+
+            LambdaInvokerFactory factory = new LambdaInvokerFactory(
+                    this.getApplicationContext(),
+                    Regions.US_EAST_1,
+                    credentialsProvider);
+
+            final MyInterface myInterface = factory.build(MyInterface.class);
+
+            NameInfo nameInfo = new NameInfo("John", "Doe");
+            //NameInfo nameInfo2 = new NameInfo("John2", "Doe2");
+
+
+
+            //String sx = myInterface.echo(nameInfo).toString();
+            //Log.d("test1", sx);
+            // The Lambda function invocation results in a network call
+            // Make sure it is not called from the main thread
+            new AsyncTask<NameInfo, Void, String>() {
+                @Override
+                protected String doInBackground(NameInfo... params) {
+                    // invoke "echo" method. In case it fails, it will throw a
+                    // LambdaFunctionException.
+                    try {
+                        //String ss = myInterface.echo(params[0]);
+                        JsonObject ss = myInterface.echo(params[0]);
+
+                        Log.d("test", myInterface.echo(params[0]).toString());
+
+                        JsonObject json = new JsonObject();
+                        JsonObject a = new JsonObject();
+                        json.addProperty("operation", "query");
+                        json.addProperty("TableName", "Chirp");
+                        json.addProperty("ConsistentRead", true);
+                        json.addProperty("KeyConditionExpression", "userId = :val");
+                        a.addProperty(":val", "apple");
+                        json.add("ExpressionAttributeValues", a);
+
+                        Log.d("test", json.toString());
+                        JsonObject response = myInterface.chirpGet(json);
+                        Log.d("test", response.toString());
+
+                        return null; //myInterface.echo(params[0]);
+                    } catch (LambdaFunctionException lfe) {
+                        Log.e("test", "Failed to invoke echo", lfe);
+                        return null;
+                    }
+                }
+
+                @Override
+                protected void onPostExecute(String result) {
+                    if (result == null) {
+                        return;
+                    }
+
+                    // Do a toast
+                    Toast.makeText(LoginActivity.this, result, Toast.LENGTH_LONG).show();
+                }
+            }.execute(nameInfo);
         } else if (!isEmailValid(email)) {
             mEmailView.setError(getString(R.string.error_invalid_email));
             focusView = mEmailView;
@@ -308,6 +427,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         mEmailView.setAdapter(adapter);
     }
+
+//    @Override
+//    public JsonObject echo(NameInfo nameInfo) {
+//        return null;
+//    }
+//
+//    @Override
+//    public void noEcho(NameInfo nameInfo) {
+//
+//    }
 
     private interface ProfileQuery {
         String[] PROJECTION = {

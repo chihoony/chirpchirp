@@ -1,6 +1,7 @@
 package jayed.triad.chirpchirp;
 
 import com.amazonaws.mobileconnectors.lambdainvoker.LambdaFunction;
+import com.google.gson.JsonObject;
 
 /*
  * A holder for lambda functions
@@ -10,13 +11,16 @@ public interface MyInterface {
     /**
      * Invoke lambda function "echo". The function name is the method name
      */
-    @LambdaFunction(functionName = "chirpGet")
-    String echo(String hello);
+    @LambdaFunction
+    JsonObject echo(NameInfo nameInfo);
+
+    @LambdaFunction
+    JsonObject chirpGet(JsonObject json);
 
     /**
      * Invoke lambda function "echo". The functionName in the annotation
      * overrides the default which is the method name
      */
-    @LambdaFunction(functionName = "chirpGet")
-    void noEcho(String hello);
+    @LambdaFunction(functionName = "echo")
+    void noEcho(NameInfo nameInfo);
 }

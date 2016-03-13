@@ -120,6 +120,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 this.getApplicationContext(),
                 Regions.US_EAST_1,
                 credentialsProvider);
+
     }
 
     private void populateAutoComplete() {
@@ -172,6 +173,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * errors are presented and no actual login attempt is made.
      */
     private void attemptLogin() {
+
         if (mAuthTask != null) {
             return;
         }
@@ -306,7 +308,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         mEmailView.setAdapter(adapter);
     }
-
 
     private interface ProfileQuery {
         String[] PROJECTION = {

@@ -34,11 +34,7 @@ import com.amazonaws.mobileconnectors.cognito.CognitoSyncManager;
 import com.amazonaws.mobileconnectors.lambdainvoker.LambdaFunctionException;
 import com.amazonaws.mobileconnectors.lambdainvoker.LambdaInvokerFactory;
 import com.amazonaws.regions.Regions;
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +48,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     private String jsonResponse;
     private JsonObject jsonObject;
+    private Config config = new Config();
+    private String notSecretKey = config.getKeyValue();
     /**
      * Id to identity READ_CONTACTS permission request.
      */
@@ -112,69 +110,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
-//        // Initialize the Amazon Cognito credentials provider
-//        CognitoCachingCredentialsProvider credentialsProvider = new CognitoCachingCredentialsProvider(
-//                this.getApplicationContext(),
-//                "us-east-1:199ef319-9d39-4578-9a1c-3dbce5c88305", // Identity Pool ID
-//                Regions.US_EAST_1 // Region
-//        );
-//
-//        LambdaInvokerFactory factory = new LambdaInvokerFactory(
-//                this.getApplicationContext(),
-//                Regions.US_EAST_1,
-//                credentialsProvider);
-//
-//
-//        final MyInterface myInterface = factory.build(MyInterface.class);
-//
-//        NameInfo nameInfo = new NameInfo("John", "Doe");
-//
-//        // The Lambda function invocation results in a network call
-//        // Make sure it is not called from the main thread
-//        new AsyncTask<NameInfo, Void, String>() {
-//            @Override
-//            protected String doInBackground(NameInfo... params) {
-//                // invoke "echo" method. In case it fails, it will throw a
-//                // LambdaFunctionException.
-//                try {
-//                    return myInterface.echo(params[0]);
-//                } catch (LambdaFunctionException lfe) {
-//                    //Log.e(, "Failed to invoke echo", lfe);
-//                    return null;
-//                }
-//            }
-//
-//            @Override
-//            protected void onPostExecute(String result) {
-//                if (result == null) {
-//                    return;
-//                }
-//
-//                // Do a toast
-//                Toast.makeText(LoginActivity.this, result, Toast.LENGTH_LONG).show();
-//            }
-//        }.execute(nameInfo);
-
-//        System.out.println("this is runned");
-//
-//        jsonResponse = "{\n" +
-//                "\t\"operation\": \"read\",\n" +
-//                "\t\"TableName\": \"Chirp\",\n" +
-//                "    \"Key\": {\"userId\": \"apple\",\n" +
-//                "    \t\t\"chirpId\": 2}\n" +
-//                "}\n";
-//
-//        System.out.println("THISISCALLED");
-//
-//        Gson gson = new Gson();
-//        JsonElement element = gson.fromJson(jsonResponse, JsonElement.class);
-//        JsonObject jsonObj = element.getAsJsonObject();
-//
-//
-//        String s = echo(jsonObj);
-//
-//        System.out.println(s);
-
     }
 
     private void populateAutoComplete() {
@@ -259,7 +194,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // Initialize the Amazon Cognito credentials provider
             CognitoCachingCredentialsProvider credentialsProvider = new CognitoCachingCredentialsProvider(
                     this.getApplicationContext(),
-                    "us-east-1:199ef319-9d39-4578-9a1c-3dbce5c88305", // Identity Pool ID
+                    notSecretKey, // Identity Pool ID
                     Regions.US_EAST_1 // Region
             );
 
@@ -288,7 +223,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         //String ss = myInterface.echo(params[0]);
                         JsonObject ss = myInterface.echo(params[0]);
 
-                        Log.d("test", myInterface.echo(params[0]).toString());
+                        Log.d("test", ss.toString());
 
                         JsonObject json = new JsonObject();
                         JsonObject a = new JsonObject();
@@ -428,15 +363,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mEmailView.setAdapter(adapter);
     }
 
-//    @Override
-//    public JsonObject echo(NameInfo nameInfo) {
-//        return null;
-//    }
-//
-//    @Override
-//    public void noEcho(NameInfo nameInfo) {
-//
-//    }
 
     private interface ProfileQuery {
         String[] PROJECTION = {

@@ -206,6 +206,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             final MyInterface myInterface = factory.build(MyInterface.class);
 
             NameInfo nameInfo = new NameInfo("John", "Doe");
+            Log.d("test", "1");
             //NameInfo nameInfo2 = new NameInfo("John2", "Doe2");
 
 
@@ -219,12 +220,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 protected String doInBackground(NameInfo... params) {
                     // invoke "echo" method. In case it fails, it will throw a
                     // LambdaFunctionException.
+                    Log.d("test", "2");
                     try {
                         //String ss = myInterface.echo(params[0]);
-                        JsonObject ss = myInterface.echo(params[0]);
-
-                        Log.d("test", ss.toString());
-
+                        Log.d("test", "3");
                         JsonObject json = new JsonObject();
                         JsonObject a = new JsonObject();
                         json.addProperty("operation", "query");

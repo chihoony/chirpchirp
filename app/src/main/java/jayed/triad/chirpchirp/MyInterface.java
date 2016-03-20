@@ -17,6 +17,9 @@ public interface MyInterface {
     @LambdaFunction
     JsonObject chirpGet(JsonObject json);
 
+    @LambdaFunction
+    JsonObject chirpCreateUser(String username, String email, String Password);
+
     /**
      * Invoke lambda function "echo". The functionName in the annotation
      * overrides the default which is the method name

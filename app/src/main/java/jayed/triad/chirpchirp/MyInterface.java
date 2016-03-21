@@ -18,7 +18,8 @@ public interface MyInterface {
     JsonObject chirpGet(JsonObject json);
 
     @LambdaFunction
-    JsonObject chirpCreateUser(String username, String email, String Password);
+    JsonObject chirpLogin(JsonObject json);
+
 
     /**
      * Invoke lambda function "echo". The functionName in the annotation

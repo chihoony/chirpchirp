@@ -27,14 +27,8 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
-
-import com.amazonaws.auth.CognitoCachingCredentialsProvider;
-import com.amazonaws.mobileconnectors.cognito.CognitoSyncManager;
 import com.amazonaws.mobileconnectors.lambdainvoker.LambdaFunctionException;
-import com.amazonaws.mobileconnectors.lambdainvoker.LambdaInvokerFactory;
-import com.amazonaws.regions.Regions;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
@@ -53,12 +47,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private static final int REQUEST_READ_CONTACTS = 0;
 
     /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
+     * JsonObjects for later
      */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
-    };
+
+
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -183,65 +175,65 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             focusView = mEmailView;
             cancel = true;
 
-            NameInfo nameInfo = new NameInfo("John", "Doe");
-            Log.d("test", "1");
-            //NameInfo nameInfo2 = new NameInfo("John2", "Doe2");
-
-
-
-            //String sx = myInterface.echo(nameInfo).toString();
-            //Log.d("test1", sx);
-            // The Lambda function invocation results in a network call
-            // Make sure it is not called from the main thread
-            new AsyncTask<NameInfo, Void, String>() {
-                @Override
-                protected String doInBackground(NameInfo... params) {
-                    // invoke "echo" method. In case it fails, it will throw a
-                    // LambdaFunctionException.
-                    Log.d("test", "2");
-                    try {
-                        //String ss = myInterface.echo(params[0]);
-                        Log.d("test", "3");
-                        JsonObject json = new JsonObject();
-                        JsonObject a = new JsonObject();
-                        json.addProperty("operation", "query");
-                        json.addProperty("TableName", "Chirp");
-                        json.addProperty("ConsistentRead", true);
-                        json.addProperty("KeyConditionExpression", "userId = :val");
-                        a.addProperty(":val", "apple");
-                        json.add("ExpressionAttributeValues", a);
-
-                        Log.d("test", json.toString());
-                        JsonObject response = Factory.getMyInterface().chirpGet(json);
-                        Log.d("test", response.toString());
-
-                        return null; //myInterface.echo(params[0]);
-                    } catch (LambdaFunctionException lfe) {
-                        Log.e("test", "Failed to invoke echo", lfe);
-                        return null;
-                    }
-                }
-
-                @Override
-                protected void onPostExecute(String result) {
-                    if (result == null) {
-                        return;
-                    }
-
-                    // Do a toast
-                    Toast.makeText(LoginActivity.this, result, Toast.LENGTH_LONG).show();
-                }
-            }.execute(nameInfo);
-        } else if (!isEmailValid(email)) {
-            mEmailView.setError(getString(R.string.error_invalid_email));
-            focusView = mEmailView;
-            cancel = true;
-        }
-
-        if (cancel) {
-            // There was an error; don't attempt login and focus the first
-            // form field with an error.
-            focusView.requestFocus();
+//            NameInfo nameInfo = new NameInfo("John", "Doe");
+//            Log.d("test", "1");
+//            //NameInfo nameInfo2 = new NameInfo("John2", "Doe2");
+//
+//
+//
+//            //String sx = myInterface.echo(nameInfo).toString();
+//            //Log.d("test1", sx);
+//            // The Lambda function invocation results in a network call
+//            // Make sure it is not called from the main thread
+//            new AsyncTask<NameInfo, Void, String>() {
+//                @Override
+//                protected String doInBackground(NameInfo... params) {
+//                    // invoke "echo" method. In case it fails, it will throw a
+//                    // LambdaFunctionException.
+//                    Log.d("test", "2");
+//                    try {
+//                        //String ss = myInterface.echo(params[0]);
+//                        Log.d("test", "3");
+//                        JsonObject json = new JsonObject();
+//                        JsonObject a = new JsonObject();
+//                        json.addProperty("operation", "query");
+//                        json.addProperty("TableName", "Chirp");
+//                        json.addProperty("ConsistentRead", true);
+//                        json.addProperty("KeyConditionExpression", "userId = :val");
+//                        a.addProperty(":val", "apple");
+//                        json.add("ExpressionAttributeValues", a);
+//
+//                        Log.d("test", json.toString());
+//                        JsonObject response = Factory.getMyInterface().chirpGet(json);
+//                        Log.d("test", response.toString());
+//
+//                        return null; //myInterface.echo(params[0]);
+//                    } catch (LambdaFunctionException lfe) {
+//                        Log.e("test", "Failed to invoke echo", lfe);
+//                        return null;
+//                    }
+//                }
+//
+//                @Override
+//                protected void onPostExecute(String result) {
+//                    if (result == null) {
+//                        return;
+//                    }
+//
+//                    // Do a toast
+//                    Toast.makeText(LoginActivity.this, result, Toast.LENGTH_LONG).show();
+//                }
+//            }.execute(nameInfo);
+//        } else if (!isEmailValid(email)) {
+//            mEmailView.setError(getString(R.string.error_invalid_email));
+//            focusView = mEmailView;
+//            cancel = true;
+//        }
+//
+//        if (cancel) {
+//            // There was an error; don't attempt login and focus the first
+//            // form field with an error.
+//            focusView.requestFocus();
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
@@ -372,23 +364,22 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         @Override
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
-
             try {
+                JsonObject json = new JsonObject();
+                json.addProperty("userId", mEmail);
+                json.addProperty("password", mPassword);
+                JsonObject response = Factory.getMyInterface().chirpLogin(json);
+                Log.e("test", "login working");
+                Log.e("test", response.toString());
                 // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
+            } catch (LambdaFunctionException lfe) {
+                Log.e("test", lfe.getDetails(), lfe);
+                Log.e("test", lfe.getDetails());
                 return false;
-            }
 
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
+                // TODO: register the new account here.
             }
-
-            // TODO: register the new account here.
+            Log.e("test", "login passed");
             return true;
         }
 

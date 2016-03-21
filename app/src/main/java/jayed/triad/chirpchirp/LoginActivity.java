@@ -47,10 +47,6 @@ import static android.Manifest.permission.READ_CONTACTS;
  */
 public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor>{//,MyInterface {
 
-    private String jsonResponse;
-    private JsonObject jsonObject;
-    private Config config = new Config();
-    private String notSecretKey = config.getKeyValue();
     /**
      * Id to identity READ_CONTACTS permission request.
      */
@@ -74,17 +70,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View mProgressView;
     private View mLoginFormView;
 
-    // Amazon reference
-    private CognitoCachingCredentialsProvider credentialsProvider;
-    private CognitoSyncManager syncClient;
-    private LambdaInvokerFactory factory;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         // Set up the login form.
+        Factory.getInstance(this);
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
 
@@ -192,20 +183,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             focusView = mEmailView;
             cancel = true;
 
-            // Initialize the Amazon Cognito credentials provider
-            CognitoCachingCredentialsProvider credentialsProvider = new CognitoCachingCredentialsProvider(
-                    this.getApplicationContext(),
-                    notSecretKey, // Identity Pool ID
-                    Regions.US_EAST_1 // Region
-            );
-
-            LambdaInvokerFactory factory = new LambdaInvokerFactory(
-                    this.getApplicationContext(),
-                    Regions.US_EAST_1,
-                    credentialsProvider);
-
-            final MyInterface myInterface = factory.build(MyInterface.class);
-
             NameInfo nameInfo = new NameInfo("John", "Doe");
             Log.d("test", "1");
             //NameInfo nameInfo2 = new NameInfo("John2", "Doe2");
@@ -235,7 +212,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         json.add("ExpressionAttributeValues", a);
 
                         Log.d("test", json.toString());
-                        JsonObject response = myInterface.chirpGet(json);
+                        JsonObject response = Factory.getMyInterface().chirpGet(json);
                         Log.d("test", response.toString());
 
                         return null; //myInterface.echo(params[0]);

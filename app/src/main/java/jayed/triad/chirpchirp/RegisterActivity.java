@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -57,7 +58,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
     private UserLoginTask mAuthTask = null;
 
     // UI references.
-    private AutoCompleteTextView mEmailView;
+    private EditText mEmailView;
     private EditText mUsernameView;
     private EditText mPasswordView;
     private View mProgressView;
@@ -160,7 +161,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
         mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
-        String username = mUsernameView.getText().toString();
+        String user = mUsernameView.getText().toString();
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
 
@@ -184,7 +185,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
+            mAuthTask = new UserLoginTask(user, email, password);
             mAuthTask.execute((Void) null);
         }
     }
@@ -200,7 +201,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
 
     private boolean isPasswordValid(String password) {
         //TODO: Replace this with your own logic
-        return password.length() > 4;
+        return password.length() >= 4;
     }
 
     /**
@@ -258,28 +259,15 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
 
     @Override
     public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
-        List<String> emails = new ArrayList<>();
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
-            emails.add(cursor.getString(ProfileQuery.ADDRESS));
             cursor.moveToNext();
         }
-
-        addEmailsToAutoComplete(emails);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
 
-    }
-
-    private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
-        //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
-        ArrayAdapter<String> adapter =
-                new ArrayAdapter<>(RegisterActivity.this,
-                        android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
-
-        mEmailView.setAdapter(adapter);
     }
 
 
@@ -299,10 +287,12 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
      */
     public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
 
+        private final String mUser;
         private final String mEmail;
         private final String mPassword;
 
-        UserLoginTask(String email, String password) {
+        UserLoginTask(String user, String email, String password) {
+            mUser = user;
             mEmail = email;
             mPassword = password;
         }
@@ -310,13 +300,16 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
         @Override
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
+
             try {
                 JsonObject json = new JsonObject();
-                json.addProperty("userId", mEmail);
+                json.addProperty("userId", mUser);
                 json.addProperty("password", mPassword);
-                JsonObject response = Factory.getMyInterface().chirpLogin(json);
-                Log.e("test", "login working");
-                Log.e("test", response.toString());
+                json.addProperty("email", mEmail);
+                Log.d("test", json.toString());
+                JsonObject response = Factory.getMyInterface().chirpCreateUser(json);
+                Log.d("test", "login working");
+                Log.d("test", response.toString());
                 // Simulate network access.
             } catch (LambdaFunctionException lfe) {
                 Log.e("test", lfe.getDetails(), lfe);
@@ -325,7 +318,8 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
 
                 // TODO: register the new account here.
             }
-            Log.e("test", "login passed");
+            Log.d("test", "login passed");
+
             return true;
         }
 

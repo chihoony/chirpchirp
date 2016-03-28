@@ -11,12 +11,15 @@ public interface MyInterface {
     /**
      * Invoke lambda function "echo". The function name is the method name
      */
+    @LambdaFunction
+    JsonObject chirpLogin(JsonObject json);
+
+    @LambdaFunction
+    JsonObject chirpCreateUser(JsonObject json);
 
     @LambdaFunction
     JsonObject chirpGet(JsonObject json);
 
-    @LambdaFunction
-    JsonObject chirpLogin(JsonObject json);
 
 
     /**

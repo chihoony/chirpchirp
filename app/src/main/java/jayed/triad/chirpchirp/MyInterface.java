@@ -11,8 +11,6 @@ public interface MyInterface {
     /**
      * Invoke lambda function "echo". The function name is the method name
      */
-    @LambdaFunction
-    JsonObject echo(NameInfo nameInfo);
 
     @LambdaFunction
     JsonObject chirpGet(JsonObject json);
@@ -24,7 +22,8 @@ public interface MyInterface {
     /**
      * Invoke lambda function "echo". The functionName in the annotation
      * overrides the default which is the method name
-     */
+
     @LambdaFunction(functionName = "echo")
     void noEcho(NameInfo nameInfo);
+    */
 }

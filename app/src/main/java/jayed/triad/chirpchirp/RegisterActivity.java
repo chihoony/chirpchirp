@@ -79,7 +79,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
+                    //attemptLogin();
                     return true;
                 }
                 return false;
@@ -180,65 +180,6 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
             focusView = mEmailView;
             cancel = true;
 
-//            NameInfo nameInfo = new NameInfo("John", "Doe");
-//            Log.d("test", "1");
-//            //NameInfo nameInfo2 = new NameInfo("John2", "Doe2");
-//
-//
-//
-//            //String sx = myInterface.echo(nameInfo).toString();
-//            //Log.d("test1", sx);
-//            // The Lambda function invocation results in a network call
-//            // Make sure it is not called from the main thread
-//            new AsyncTask<NameInfo, Void, String>() {
-//                @Override
-//                protected String doInBackground(NameInfo... params) {
-//                    // invoke "echo" method. In case it fails, it will throw a
-//                    // LambdaFunctionException.
-//                    Log.d("test", "2");
-//                    try {
-//                        //String ss = myInterface.echo(params[0]);
-//                        Log.d("test", "3");
-//                        JsonObject json = new JsonObject();
-//                        JsonObject a = new JsonObject();
-//                        json.addProperty("operation", "query");
-//                        json.addProperty("TableName", "Chirp");
-//                        json.addProperty("ConsistentRead", true);
-//                        json.addProperty("KeyConditionExpression", "userId = :val");
-//                        a.addProperty(":val", "apple");
-//                        json.add("ExpressionAttributeValues", a);
-//
-//                        Log.d("test", json.toString());
-//                        JsonObject response = Factory.getMyInterface().chirpGet(json);
-//                        Log.d("test", response.toString());
-//
-//                        return null; //myInterface.echo(params[0]);
-//                    } catch (LambdaFunctionException lfe) {
-//                        Log.e("test", "Failed to invoke echo", lfe);
-//                        return null;
-//                    }
-//                }
-//
-//                @Override
-//                protected void onPostExecute(String result) {
-//                    if (result == null) {
-//                        return;
-//                    }
-//
-//                    // Do a toast
-//                    Toast.makeText(LoginActivity.this, result, Toast.LENGTH_LONG).show();
-//                }
-//            }.execute(nameInfo);
-//        } else if (!isEmailValid(email)) {
-//            mEmailView.setError(getString(R.string.error_invalid_email));
-//            focusView = mEmailView;
-//            cancel = true;
-//        }
-//
-//        if (cancel) {
-//            // There was an error; don't attempt login and focus the first
-//            // form field with an error.
-//            focusView.requestFocus();
         } else {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.

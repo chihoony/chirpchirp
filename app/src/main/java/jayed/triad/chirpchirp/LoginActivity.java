@@ -35,6 +35,8 @@ import com.google.gson.JsonObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import jayed.triad.chirpchirp.classes.User;
+
 import static android.Manifest.permission.READ_CONTACTS;
 
 /**
@@ -82,7 +84,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
-        Button mUserRegisterButton = (Button) findViewById(R.id.user_signup_button);
+        Button mUserRegisterButton = (Button) findViewById(R.id.redirect_to_register_button);
         mUserRegisterButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -289,8 +291,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 json.addProperty("userId", mUser);
                 json.addProperty("password", mPassword);
                 JsonObject response = Factory.getMyInterface().chirpLogin(json);
-                Log.e("test", "login working");
-                Log.e("test", response.toString());
+                Log.d("test", "login working");
+                Log.d("test", response.toString());
+                User.getInstance(response);
                 // Simulate network access.
             } catch (LambdaFunctionException lfe) {
                 Log.e("test", lfe.getDetails(), lfe);
@@ -299,7 +302,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
                 // TODO: register the new account here.
             }
-            Log.e("test", "login passed");
+            Log.d("test", "login passed");
             return true;
         }
 

@@ -43,7 +43,7 @@
                     android:inputType="text"
                     android:hyphenationFrequency="none"
                     android:longClickable="true"
-                    android:hint="User Name" />
+                    android:hint="Username" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -71,9 +71,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="@string/action_sign_in"
+                android:text="@string/action_sign_in_short"
                 android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/redirect_to_register_button"
+                style="?android:textAppearanceSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/action_redirect_to_register"
+                android:textStyle="bold"
+                android:layout_gravity="center_horizontal" />
 
         </LinearLayout>
     </ScrollView>
+
 </LinearLayout>

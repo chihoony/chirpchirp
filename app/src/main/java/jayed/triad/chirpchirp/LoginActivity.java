@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -81,6 +82,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
+        Button mUserRegisterButton = (Button) findViewById(R.id.user_signup_button);
+        mUserRegisterButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                redirectToRegisterActivity();
+            }
+        });
+
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
@@ -100,6 +109,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     }
 
+    /**
+     * Redirects to the registeration activity for furthur sign-up process
+     */
+    private void redirectToRegisterActivity() {
+        startActivity(new Intent(getApplicationContext(), RegisterActivity.class));
+    }
 
     /**
      * Attempts to sign in or register the account specified by the login form.

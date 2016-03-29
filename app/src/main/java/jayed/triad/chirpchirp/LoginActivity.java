@@ -29,6 +29,7 @@ import com.google.gson.JsonObject;
 
 import java.util.List;
 
+import jayed.triad.chirpchirp.classes.Account;
 import jayed.triad.chirpchirp.classes.User;
 
 /**
@@ -269,6 +270,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         private final String mUser;
         private final String mPassword;
+        private String error;
 
         UserLoginTask(String user, String password) {
             mUser = user;
@@ -285,9 +287,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 JsonObject response = Factory.getMyInterface().chirpLogin(json);
                 Log.d("test", "login working");
                 Log.d("test", response.toString());
-                User.getInstance(response);
+                Account.getInstance(response); // parse userId into singleton
                 // Simulate network access.
             } catch (LambdaFunctionException lfe) {
+                error = lfe.getDetails().toString();
                 Log.e("test", lfe.getDetails(), lfe);
                 Log.e("test", lfe.getDetails());
                 return false;
@@ -305,10 +308,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             if (success) {
                 startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+            } else if (error.equals("{\"errorMessage\":\"error_user_not_found\"}")) {
+                mUserView.setError(getString(R.string.error_user_not_found));
+                mUserView.requestFocus();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
             }
+
         }
 
         @Override

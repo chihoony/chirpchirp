@@ -290,6 +290,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
         private final String mUser;
         private final String mEmail;
         private final String mPassword;
+        private String error;
 
         UserLoginTask(String user, String email, String password) {
             mUser = user;
@@ -312,8 +313,10 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
                 Log.d("test", response.toString());
                 // Simulate network access.
             } catch (LambdaFunctionException lfe) {
+                error = lfe.getDetails().toString();
                 Log.e("test", lfe.getDetails(), lfe);
                 Log.e("test", lfe.getDetails());
+                Log.e("test", lfe.getDetails().toString());
                 return false;
 
                 // TODO: register the new account here.
@@ -329,7 +332,13 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
             showProgress(false);
 
             if (success) {
-                finish();
+                finish(); // brings user back to login page
+            } else if (error.equals("{\"errorMessage\":\"error_duplicate_user\"}")) {
+                mUsernameView.setError(getString(R.string.error_duplicate_user));
+                mUsernameView.requestFocus();
+            } else if (error.equals("{\"errorMessage\":\"error_duplicate_email\"}")) {
+                mEmailView.setError(getString(R.string.error_duplicate_email));
+                mEmailView.requestFocus();
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();

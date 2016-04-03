@@ -30,7 +30,6 @@ import com.google.gson.JsonObject;
 import java.util.List;
 
 import jayed.triad.chirpchirp.classes.Account;
-import jayed.triad.chirpchirp.classes.User;
 
 /**
  * A login screen that offers login via user/password.
@@ -282,8 +281,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // TODO: attempt authentication against a network service.
             try {
                 JsonObject json = new JsonObject();
-                json.addProperty("userId", mUser);
-                json.addProperty("password", mPassword);
+//                json.addProperty("userId", mUser);
+//                json.addProperty("password", mPassword);
+                json.addProperty("userId", "sample1");
+                json.addProperty("password", "1234");
                 JsonObject response = Factory.getMyInterface().chirpLogin(json);
                 Log.d("test", "login working");
                 Log.d("test", response.toString());
@@ -298,6 +299,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 // TODO: register the new account here.
             }
             Log.d("test", "login passed");
+            Log.d("test", Account.getAccount().getUser().getChirps().toString());
+
             return true;
         }
 
@@ -307,6 +310,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
 
             if (success) {
+                finish();
                 startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
             } else if (error.equals("{\"errorMessage\":\"error_user_not_found\"}")) {
                 mUserView.setError(getString(R.string.error_user_not_found));

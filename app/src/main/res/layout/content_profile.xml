@@ -20,20 +20,20 @@
         android:src="@mipmap/ic_launcher"/>
 
     <TextView
+        android:id="@+id/username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Name: -----"
-        android:id="@+id/username"
+        android:text="name placeholder"
         android:layout_alignTop="@+id/profileImageButton"
         android:layout_toEndOf="@+id/profileImageButton" />
 
     <TextView
+        android:id="@+id/description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Description:  ------"
-        android:id="@+id/description"
+        android:text="description placeholder"
         android:layout_below="@+id/username"
         android:layout_alignStart="@+id/username" />
 
@@ -44,18 +44,7 @@
         android:text="Small Text"
         android:id="@+id/textView"
         android:layout_below="@+id/description"
-        android:layout_alignEnd="@+id/description" />
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/profileImageButton">
-
-        <ListView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"></ListView>
-
-    </ScrollView>
+        android:layout_centerHorizontal="true" />
 
 
 </RelativeLayout>

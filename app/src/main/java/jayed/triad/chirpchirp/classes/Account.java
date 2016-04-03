@@ -6,8 +6,6 @@ import android.util.Log;
 import com.google.gson.JsonObject;
 
 import java.util.Date;
-import java.util.List;
-import java.util.Map;
 
 public class Account {
     private static Account theAccount;
@@ -52,8 +50,13 @@ public class Account {
         return theAccount;
     }
 
+    public String removeQuotes(String str) {
+        str = str.replace("\"", "");
+        return str;
+    }
+
     public String getAccountId() {
-        return userId;
+        return removeQuotes(this.userId);
     }
 
     private void setAccountId(String userId) {
@@ -61,7 +64,7 @@ public class Account {
     }
 
     public String getEmail() {
-        return userId;
+        return this.userId;
     }
 
     private void setEmail(String email) {
@@ -81,7 +84,11 @@ public class Account {
     }
 
     public void parseUser(JsonObject jsonObject) {
-        user = new User(jsonObject);
+        this.user = new User(jsonObject);
+    }
+
+    public String getDescription () {
+        return this.user.getDescription();
     }
 
     /*

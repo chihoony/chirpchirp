@@ -19,4 +19,5 @@
     </string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_profile">ProfileActivity</string>
+    <string name="String">name placeholder</string>
 </resources>

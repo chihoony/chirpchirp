@@ -1,6 +1,7 @@
 package jayed.triad.chirpchirp;
 
 import com.amazonaws.mobileconnectors.lambdainvoker.LambdaFunction;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 /*
@@ -20,6 +21,8 @@ public interface MyInterface {
     @LambdaFunction
     JsonObject chirpGet(JsonObject json);
 
+    @LambdaFunction
+    JsonObject chirpGetMyChirps(JsonArray json);
 
 
     /**

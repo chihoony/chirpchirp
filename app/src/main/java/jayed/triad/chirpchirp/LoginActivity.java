@@ -25,6 +25,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.amazonaws.mobileconnectors.lambdainvoker.LambdaFunctionException;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import java.util.List;
@@ -298,6 +299,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 // TODO: register the new account here.
             }
             Log.d("test", "login passed");
+
             return true;
         }
 

@@ -48,6 +48,10 @@ public class Account {
         return theAccount;
     }
 
+    public static Account getAccount() { // static -> global point of access by EventLog.getInstance()
+        return theAccount;
+    }
+
     public String getAccountId() {
         return userId;
     }

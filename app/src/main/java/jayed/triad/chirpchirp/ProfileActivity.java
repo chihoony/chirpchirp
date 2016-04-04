@@ -15,13 +15,15 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import jayed.triad.chirpchirp.classes.Account;
+import jayed.triad.chirpchirp.classes.Chirps;
 
 public class ProfileActivity extends AppCompatActivity {
 
     private ChirpsTask mChirps = null;
-    JsonArray myChirps;
+    private JsonArray myChirps;
     private TextView mUsername;
     private TextView mDescription;
+    private Chirps chirps;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,12 +71,14 @@ public class ProfileActivity extends AppCompatActivity {
             // TODO: attempt authentication against a network service.
 
             try {
-                JsonArray chirps = Account.getAccount().getUser().getChirps();
-                Log.d("test", chirps.toString());
-                JsonObject response = Factory.getMyInterface().chirpGetMyChirps(chirps);
+                JsonArray chirpsJson = Account.getAccount().getUser().getChirps();
+                Log.d("test", chirpsJson.toString());
+                JsonObject response = Factory.getMyInterface().chirpRegister(chirpsJson);
+//                JsonObject response = Factory.getMyInterface().chirpGetMyChirps(chirpsJson);
                 Log.d("test", "try to get list of user's own chirps");
                 Log.d("test", response.toString());
-                myChirps = response.getAsJsonArray("Chirp");
+                myChirps = response.getAsJsonObject("Responses").getAsJsonArray("Chirp");
+                chirps = new Chirps(myChirps);
                 // Simulate network access.
             } catch (LambdaFunctionException lfe) {
                 error = lfe.getDetails().toString();

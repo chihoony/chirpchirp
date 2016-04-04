@@ -25,6 +25,9 @@ public interface MyInterface {
     JsonObject chirpGetMyChirps(JsonArray json);
 
 
+    @LambdaFunction
+    JsonObject chirpRegister(JsonArray json);
+
     /**
      * Invoke lambda function "echo". The functionName in the annotation
      * overrides the default which is the method name

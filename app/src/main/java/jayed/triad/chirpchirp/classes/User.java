@@ -4,16 +4,14 @@ package jayed.triad.chirpchirp.classes;
 import android.util.Log;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-
-import org.json.JSONArray;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 public class User {
 //    public static final String[] array1 = {"Apple", "Banana", "Cookie"};
@@ -54,9 +52,13 @@ public class User {
         Log.d("test", this.getUserId());
         Log.d("test", this.getJoinDate().toString());
     }
+    public String removeQuotes(String str) {
+        str = str.replace("\"", "");
+        return str;
+    }
 
     public String getUserId() {
-        return userId;
+        return removeQuotes(userId);
     }
 
     public void setUserId(String userId) {
@@ -80,7 +82,7 @@ public class User {
     }
 
     public String getProfilePicture() {
-        return profilePicture;
+        return removeQuotes(profilePicture);
     }
 
     public void setProfilePicture(String profilePicture) {
@@ -99,9 +101,7 @@ public class User {
         }
     }
 
-    public String getDescription() {
-        return description;
-    }
+    public String getDescription() { return removeQuotes(description); }
 
     public void setDescription(String description) {
         this.description = description;
@@ -138,4 +138,23 @@ public class User {
     public void setLikedChirps(JsonArray likedChirps) {
         this.likedChirps = likedChirps;
     }
+
+// PARSERS BELOW
+
+    public List<String> parseFollowers(JsonArray followers) {
+        List<String> listofFollowers = new ArrayList<String>();
+        for (JsonElement item : followers) {
+            listofFollowers.add(item.toString());
+        }
+        return listofFollowers;
+    }
+
+    public List<String> parseFollowing(JsonArray following) {
+        List<String> listofFollowing = new ArrayList<String>();
+        for (JsonElement item : following) {
+            listofFollowing.add(item.toString());
+        }
+        return listofFollowing;
+    }
+
 }

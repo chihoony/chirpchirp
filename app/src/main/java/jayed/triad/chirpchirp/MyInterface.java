@@ -1,7 +1,6 @@
 package jayed.triad.chirpchirp;
 
 import com.amazonaws.mobileconnectors.lambdainvoker.LambdaFunction;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 /*
@@ -25,8 +24,6 @@ public interface MyInterface {
     JsonObject chirpGetMyChirps(JsonObject json);
 
 
-    @LambdaFunction
-    JsonObject chirpRegister(JsonArray json);
 
     /**
      * Invoke lambda function "echo". The functionName in the annotation

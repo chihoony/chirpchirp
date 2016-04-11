@@ -91,6 +91,7 @@ public class Account {
         return this.user.getDescription();
     }
 
+
     /*
     public String getPassword() {
         return password;

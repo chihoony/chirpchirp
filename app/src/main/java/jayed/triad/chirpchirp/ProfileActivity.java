@@ -70,35 +70,8 @@ public class ProfileActivity extends AppCompatActivity
         mDescription = (TextView)findViewById(R.id.description);
         mDescription.setText(description);
 
-//        Log.d("test", "attempting to post profileimage");
-//        URL newurl = null;
-//        Bitmap mIcon_val = null;
-//        Log.d("test", Account.getAccount().getUser().getProfilePicture());
-//        try {
-//            newurl = new URL(Account.getAccount().getUser().getProfilePicture());
-//            Log.d("test", "attempting to get profileimage url");
-//            mIcon_val = BitmapFactory.decodeStream(newurl.openConnection() .getInputStream());
-//            Log.d("test", "attempting to convert profileimage url to bitmap");
-//        } catch (MalformedURLException e) {
-//            Log.e("test", "failed to get url for image");
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        String profileImagesrc = Account.getAccount().getUser().getProfilePicture();
-//        mProfileImage = (ImageButton)findViewById(R.id.profileImageButton);
-//        if (mIcon_val != null) {
-//            mProfileImage.setImageBitmap(mIcon_val);
-//        };
-//        String profileImagesrc = Account.getAccount().getUser().getProfilePicture();
         mProfileImage = (ImageButton)findViewById(R.id.profileImageButton);
         new ImageLoadTask(Account.getAccount().getUser().getProfilePicture(), mProfileImage).execute();
-//        if (getBitmapFromURL(Account.getAccount().getUser().getProfilePicture()) != null)
-//            mProfileImage.setImageBitmap(getBitmapFromURL(Account.getAccount().getUser().getProfilePicture()));
-//        if (mIcon_val != null) {
-//            mProfileImage.setImageBitmap(mIcon_val);
-//        };
-
 
         String error;
 
@@ -106,30 +79,11 @@ public class ProfileActivity extends AppCompatActivity
         mChirp.execute((Void) null);
         //Log.d("test", "THIS PRINTS " + myChirps.toString());
 
-    }
-
-//    public static Bitmap getBitmapFromURL(String src) {
-//        try {
-//            Log.e("src",src);
-//            URL url = new URL(src);
-//            Log.e("src","Attemping to create url from: " + src);
-//            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-//            connection.setDoInput(true);
-//            Log.e("src","3");
-//            connection.connect();
-//            Log.e("src","2");
-//            InputStream input = connection.getInputStream();
-//            Log.e("src","1");
-//            Bitmap myBitmap = BitmapFactory.decodeStream(input);
-//            Log.e("src","Attempting with Bitmap conversion: " + src);
-//            Log.e("Bitmap","returned");
-//            return myBitmap;
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            Log.e("Exception",e.getMessage());
-//            return null;
+//        for (Chirp chirp: chirps.) {
+//
 //        }
-//    }
+
+    }
 
     @Override
     public void onBackPressed() {
@@ -188,6 +142,7 @@ public class ProfileActivity extends AppCompatActivity
         return true;
     }
 
+//    THIS IS WHERE THE PROFILE ACTIVITY GETS CHIRPS ASYNC
     public class ChirpsTask extends AsyncTask<Void, Void, Boolean> {
 
         private String error;
@@ -201,23 +156,24 @@ public class ProfileActivity extends AppCompatActivity
             // TODO: attempt authentication against a network service.
 
             try {
+                JsonObject currentUser = new JsonObject();
+                currentUser.addProperty("userId", Account.getAccount().getAccountId());
                 JsonArray chirpsJson = Account.getAccount().getUser().getChirps();
-                Log.d("test", chirpsJson.toString());
-                JsonObject response = Factory.getMyInterface().chirpRegister(chirpsJson);
+                currentUser.add("chirps", chirpsJson);
+                myChirps = Factory.getMyInterface().chirpGetMyChirps(currentUser);
 //                JsonObject response = Factory.getMyInterface().chirpGetMyChirps(chirpsJson);
-                Log.d("test", "try to get list of user's own chirps");
-                Log.d("test", response.toString());
-                myChirps = response.getAsJsonObject("Responses").getAsJsonArray("Chirp");
+                Log.d("patest", "try to get list of user's own chirps");
+                Log.d("patest", myChirps.toString());
                 chirps = new Chirps(myChirps);
                 // Simulate network access.
             } catch (LambdaFunctionException lfe) {
                 error = lfe.getDetails().toString();
-                Log.e("test", lfe.getDetails(), lfe);
-                Log.e("test", lfe.getDetails());
-                Log.e("test", lfe.getDetails().toString());
+                Log.e("patest", lfe.getDetails(), lfe);
+                Log.e("patest", lfe.getDetails());
+                Log.e("patest", lfe.getDetails().toString());
 
             }
-            Log.d("test", "get my chirps passed");
+            Log.d("patest", "get my chirps passed");
 
             return true;
         }

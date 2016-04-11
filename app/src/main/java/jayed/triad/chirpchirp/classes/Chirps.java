@@ -4,7 +4,6 @@ import android.util.Log;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +27,10 @@ public class Chirps {
         for (Chirp next : chirps) {
             Log.d("test", next.getChirp());
         }
+    }
+
+    public List<Chirp> getChirps() {
+        return chirps;
     }
 
 

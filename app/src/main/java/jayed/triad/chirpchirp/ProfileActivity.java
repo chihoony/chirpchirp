@@ -4,7 +4,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -22,6 +21,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import jayed.triad.chirpchirp.classes.Account;
+import jayed.triad.chirpchirp.classes.Chirp;
 import jayed.triad.chirpchirp.classes.Chirps;
 import jayed.triad.chirpchirp.classes.ImageLoadTask;
 
@@ -47,8 +47,11 @@ public class ProfileActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+                for(Chirp chirp: chirps) {
+                    Log.d("patest", chirp.getChirp());
+                }
             }
         });
 
@@ -78,10 +81,6 @@ public class ProfileActivity extends AppCompatActivity
         ChirpsTask mChirp = new ChirpsTask();
         mChirp.execute((Void) null);
         //Log.d("test", "THIS PRINTS " + myChirps.toString());
-
-//        for (Chirp chirp: chirps.) {
-//
-//        }
 
     }
 

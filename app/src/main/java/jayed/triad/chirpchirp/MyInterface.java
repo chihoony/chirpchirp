@@ -22,7 +22,7 @@ public interface MyInterface {
     JsonObject chirpGet(JsonObject json);
 
     @LambdaFunction
-    JsonObject chirpGetMyChirps(JsonArray json);
+    JsonObject chirpGetMyChirps(JsonObject json);
 
 
     @LambdaFunction

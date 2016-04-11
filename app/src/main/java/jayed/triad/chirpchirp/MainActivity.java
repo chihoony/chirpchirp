@@ -1,8 +1,10 @@
 package jayed.triad.chirpchirp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -12,9 +14,31 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+
+import com.amazonaws.mobileconnectors.lambdainvoker.LambdaFunctionException;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.List;
+
+import jayed.triad.chirpchirp.classes.Account;
+import jayed.triad.chirpchirp.classes.Chirp;
+import jayed.triad.chirpchirp.classes.Chirps;
+
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    private String accountId;
+    private JsonObject chirpsInJSONObject;
+    private String error;
+    private List<Chirp> chirpsToDisplay;
+    private TextView mUsername;
+    private TextView mChirpDescription;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,14 +47,18 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // TODO: FloatingActionButton for new chirp.
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+
+        //TODO: make the floating action button to redirect to the newChrip activity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                redirectToNewChirpActivity();
             }
         });
+
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -40,7 +68,44 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        /**
+         * 1. get current user information
+         * 2. using the info, get user's following list (list of users that current user is following)
+         * 3. get all chirps from each user in the list
+         * 4. sort them in chronological order
+         * 5. display
+         */
+
+        // TODO: (1)
+        accountId = Account.getAccount().getAccountId(); //TODO: assign this to a variable
+
+        // TODO: (2)
+        try {
+            JsonObject json = new JsonObject();
+            json.addProperty("userId", accountId);
+            json.add("chirps", Account.getAccount().getUser().getChirps());
+            chirpsInJSONObject = Factory.getMyInterface().chirpGetMyChirps(json);
+        } catch (LambdaFunctionException lfe) {
+            error = lfe.getDetails().toString();
+        }
+        Chirps chirpsObject = new Chirps(chirpsInJSONObject.getAsJsonArray());
+        chirpsToDisplay = chirpsObject.getChirps();
+        mUsername = (TextView) findViewById(R.id.username);
+        mUsername.setText(Account.getAccount().getAccountId());
+
+        mChirpDescription = (TextView) findViewById(R.id.chirpDescription);
+        mChirpDescription.setText(chirpsToDisplay.get(0).getChirp());
+
+
+
+
+
+
+
     }
+
+
 
     @Override
     public void onBackPressed() {
@@ -77,25 +142,25 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        if (id == R.id.nav_profile) {
+            startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+        } else if (id == R.id.nav_timeline) {
+            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+        } else if (id == R.id.nav_settings) {
+            // TODO: uncomment after implementation of SettingsActivity
+//            startActivity(new Intent(getApplicationContext(), MainActivity.class));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void redirectToNewChirpActivity() {
+        startActivity(new Intent(getApplicationContext(), NewChirpActivity.class));
     }
 }

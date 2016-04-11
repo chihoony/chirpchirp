@@ -23,6 +23,8 @@
 
     <!-- Strings related to Settings -->
 
+
+
     <!-- Example General settings -->
     <string name="pref_header_general">General</string>
 
@@ -173,5 +175,7 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
->>>>>>> task/dashboard
+    <string name="what_are_you_dreaming">What are you dreaming?</string>
+    <string name="chirp">chirp</string>
+    >>>>>>> task/dashboard
 </resources>

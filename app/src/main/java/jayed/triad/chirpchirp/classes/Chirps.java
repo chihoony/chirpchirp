@@ -29,6 +29,9 @@ public class Chirps {
             Log.d("test", next.getChirp());
         }
     }
+    public List<Chirp> getChirps() {
+        return this.chirps;
+    }
 
 
 

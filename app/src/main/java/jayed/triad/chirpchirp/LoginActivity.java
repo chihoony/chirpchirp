@@ -312,7 +312,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             if (success) {
                 finish();
-                startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
             } else if (error.equals("{\"errorMessage\":\"error_user_not_found\"}")) {
                 mUserView.setError(getString(R.string.error_user_not_found));
                 mUserView.requestFocus();

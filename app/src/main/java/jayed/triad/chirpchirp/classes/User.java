@@ -52,9 +52,13 @@ public class User {
         Log.d("test", this.getUserId());
         Log.d("test", this.getJoinDate().toString());
     }
+    public String removeQuotes(String str) {
+        str = str.replace("\"", "");
+        return str;
+    }
 
     public String getUserId() {
-        return userId;
+        return removeQuotes(userId);
     }
 
     public void setUserId(String userId) {
@@ -78,7 +82,7 @@ public class User {
     }
 
     public String getProfilePicture() {
-        return profilePicture;
+        return removeQuotes(profilePicture);
     }
 
     public void setProfilePicture(String profilePicture) {
@@ -97,7 +101,7 @@ public class User {
         }
     }
 
-    public String getDescription() { return description; }
+    public String getDescription() { return removeQuotes(description); }
 
     public void setDescription(String description) {
         this.description = description;

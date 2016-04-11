@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.amazonaws.mobileconnectors.lambdainvoker.LambdaFunctionException;
@@ -22,6 +23,7 @@ import com.google.gson.JsonObject;
 
 import jayed.triad.chirpchirp.classes.Account;
 import jayed.triad.chirpchirp.classes.Chirps;
+import jayed.triad.chirpchirp.classes.ImageLoadTask;
 
 public class ProfileActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -30,6 +32,7 @@ public class ProfileActivity extends AppCompatActivity
     private JsonArray myChirps;
     private TextView mUsername;
     private TextView mDescription;
+    private ImageButton mProfileImage;
     private Chirps chirps;
 
     @Override
@@ -67,6 +70,36 @@ public class ProfileActivity extends AppCompatActivity
         mDescription = (TextView)findViewById(R.id.description);
         mDescription.setText(description);
 
+//        Log.d("test", "attempting to post profileimage");
+//        URL newurl = null;
+//        Bitmap mIcon_val = null;
+//        Log.d("test", Account.getAccount().getUser().getProfilePicture());
+//        try {
+//            newurl = new URL(Account.getAccount().getUser().getProfilePicture());
+//            Log.d("test", "attempting to get profileimage url");
+//            mIcon_val = BitmapFactory.decodeStream(newurl.openConnection() .getInputStream());
+//            Log.d("test", "attempting to convert profileimage url to bitmap");
+//        } catch (MalformedURLException e) {
+//            Log.e("test", "failed to get url for image");
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        String profileImagesrc = Account.getAccount().getUser().getProfilePicture();
+//        mProfileImage = (ImageButton)findViewById(R.id.profileImageButton);
+//        if (mIcon_val != null) {
+//            mProfileImage.setImageBitmap(mIcon_val);
+//        };
+//        String profileImagesrc = Account.getAccount().getUser().getProfilePicture();
+        mProfileImage = (ImageButton)findViewById(R.id.profileImageButton);
+        new ImageLoadTask(Account.getAccount().getUser().getProfilePicture(), mProfileImage).execute();
+//        if (getBitmapFromURL(Account.getAccount().getUser().getProfilePicture()) != null)
+//            mProfileImage.setImageBitmap(getBitmapFromURL(Account.getAccount().getUser().getProfilePicture()));
+//        if (mIcon_val != null) {
+//            mProfileImage.setImageBitmap(mIcon_val);
+//        };
+
+
         String error;
 
         ChirpsTask mChirp = new ChirpsTask();
@@ -74,6 +107,29 @@ public class ProfileActivity extends AppCompatActivity
         //Log.d("test", "THIS PRINTS " + myChirps.toString());
 
     }
+
+//    public static Bitmap getBitmapFromURL(String src) {
+//        try {
+//            Log.e("src",src);
+//            URL url = new URL(src);
+//            Log.e("src","Attemping to create url from: " + src);
+//            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+//            connection.setDoInput(true);
+//            Log.e("src","3");
+//            connection.connect();
+//            Log.e("src","2");
+//            InputStream input = connection.getInputStream();
+//            Log.e("src","1");
+//            Bitmap myBitmap = BitmapFactory.decodeStream(input);
+//            Log.e("src","Attempting with Bitmap conversion: " + src);
+//            Log.e("Bitmap","returned");
+//            return myBitmap;
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            Log.e("Exception",e.getMessage());
+//            return null;
+//        }
+//    }
 
     @Override
     public void onBackPressed() {

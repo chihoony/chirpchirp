@@ -71,7 +71,7 @@ public class ProfileActivity extends AppCompatActivity {
             try {
                 JsonArray chirps = Account.getAccount().getUser().getChirps();
                 Log.d("test", chirps.toString());
-                JsonObject response = Factory.getMyInterface().chirpGetMyChirps(chirps);
+                JsonObject response = Factory.getMyInterface().chirpRegister(chirps);
                 Log.d("test", "try to get list of user's own chirps");
                 Log.d("test", response.toString());
                 myChirps = response.getAsJsonArray("Chirp");

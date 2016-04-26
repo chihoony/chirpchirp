@@ -10,10 +10,12 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     android:orientation="vertical">
+
     <TableLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        android:layout_height="wrap_content"
+        >
+
         <TableRow
             android:weightSum="1">
 
@@ -38,7 +40,7 @@
                     android:id="@+id/chirpusername"
                     android:text="chirpusername placeholder"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:layout_alignRight="@+id/profileImageButton" />
+                    />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -47,6 +49,41 @@
                     android:text="chirpdescription placeholder"
                     android:layout_below="@+id/chirpusername"
                     android:layout_alignStart="@+id/chirpusername" />
+            </RelativeLayout>
+        </TableRow>
+        <TableRow
+            android:weightSum="1">
+
+            <ImageButton
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:layout_weight="0.2"
+                android:scaleType="fitCenter"
+                android:id="@+id/chirpprofileImageButton2"
+                android:layout_alignParentStart="true"
+                android:src="@mipmap/ic_launcher"/>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.8">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/chirpusername2"
+                    android:text="chirpusername placeholder"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/chirpDescription2"
+                    android:text="chirpdescription placeholder"
+                    android:layout_below="@+id/chirpusername2"
+                    android:layout_alignStart="@+id/chirpusername2" />
             </RelativeLayout>
         </TableRow>
     </TableLayout>

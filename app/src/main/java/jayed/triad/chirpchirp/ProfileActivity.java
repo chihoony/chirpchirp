@@ -33,6 +33,7 @@ public class ProfileActivity extends AppCompatActivity
     private TextView mUsername;
     private TextView mDescription;
     private ImageButton mProfileImage;
+    private TextView mChirpDescription;
     private Chirps chirps;
 
     @Override
@@ -75,6 +76,7 @@ public class ProfileActivity extends AppCompatActivity
 
         mProfileImage = (ImageButton)findViewById(R.id.profileImageButton);
         new ImageLoadTask(Account.getAccount().getUser().getProfilePicture(), mProfileImage).execute();
+
 
         String error;
 

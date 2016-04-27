@@ -281,9 +281,8 @@ public class ProfileActivity extends AppCompatActivity
 //        mAuthTask = null;
 //        showProgress(false);
 //    }
-    AWSCredentials credential = new BasicAWSCredentials("AKIAJUBTLB33CFFSTB4A","ahWBF2BbSttsjve4xuP0Px9kj6p6s0e2dWRBU5hn")
-    TransferUtility utility = 
 
+    
 }
 
 

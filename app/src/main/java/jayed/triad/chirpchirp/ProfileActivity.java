@@ -13,12 +13,18 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.amazonaws.mobileconnectors.lambdainvoker.LambdaFunctionException;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import jayed.triad.chirpchirp.classes.Account;
 import jayed.triad.chirpchirp.classes.Chirp;
@@ -35,6 +41,7 @@ public class ProfileActivity extends AppCompatActivity
     private ImageButton mProfileImage;
     private TextView mChirpDescription;
     private Chirps chirps;
+    private List<Chirp> mchirps = new ArrayList<Chirp>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +72,7 @@ public class ProfileActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+
         Log.d("test", "attempting to set account Id");
         mUsername = (TextView)findViewById(R.id.username);
         String username = Account.getAccount().getAccountId();
@@ -76,14 +84,31 @@ public class ProfileActivity extends AppCompatActivity
 
         mProfileImage = (ImageButton)findViewById(R.id.profileImageButton);
         new ImageLoadTask(Account.getAccount().getUser().getProfilePicture(), mProfileImage).execute();
-
-
-        String error;
+        populateChirplist();
+        populateListView();
 
         ChirpsTask mChirp = new ChirpsTask();
         mChirp.execute((Void) null);
+        String error;
         //Log.d("test", "THIS PRINTS " + myChirps.toString());
 
+    }
+
+    private void populateListView() {
+        Log.d("chirptest", "1");
+        ArrayAdapter<Chirp> adapter = new MyListAdapter();
+        Log.d("chirptest", "2");
+        ListView list = (ListView) findViewById(R.id.chirpsListView);
+        Log.d("chirptest", "3");
+        list.setAdapter(adapter);
+    }
+
+    private void populateChirplist() {
+        mchirps.add(new Chirp("Jimmy", "0"));
+        mchirps.add(new Chirp("Ray", "1"));
+        mchirps.add(new Chirp("Edward", "2"));
+        mchirps.add(new Chirp("Jayed", "3"));
+        mchirps.add(new Chirp("Triad", "4"));
     }
 
     @Override
@@ -166,6 +191,7 @@ public class ProfileActivity extends AppCompatActivity
                 Log.d("patest", "try to get list of user's own chirps");
                 Log.d("patest", myChirps.toString());
                 chirps = new Chirps(myChirps);
+//                mchirps = chirps.getChirps();
                 // Simulate network access.
             } catch (LambdaFunctionException lfe) {
                 error = lfe.getDetails().toString();
@@ -175,10 +201,47 @@ public class ProfileActivity extends AppCompatActivity
 
             }
             Log.d("patest", "get my chirps passed");
-
             return true;
         }
 
+    }
+
+    private class MyListAdapter extends ArrayAdapter<Chirp> {
+        public MyListAdapter() {
+            super(ProfileActivity.this, R.layout.content_chirprelative, mchirps);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            // Make sure we have a view to work with (may have been given null)
+            View itemView = convertView;
+            if (itemView == null) {
+                itemView = getLayoutInflater().inflate(R.layout.content_chirprelative, parent, false);
+            }
+
+            // Find the car to work with.
+            Chirp currentChirp = mchirps.get(position);
+            Log.d("chirptest", Integer.toString(position));
+            // Fill the view
+//            ImageView imageView = (ImageView)itemView.findViewById(R.id.item_icon);
+//            imageView.setImageResource(currentCar.getIconID());
+
+            // ChirpUsername:
+            TextView chirpUsernameText = (TextView) itemView.findViewById(R.id.chirpusername);
+            chirpUsernameText.setText(currentChirp.getUserId());
+            Log.d("chirptest", currentChirp.getUserId());
+            Log.d("chirptest", "trying to get chirp username");
+            // ChirpDescription:
+            TextView chirpDescription = (TextView) itemView.findViewById(R.id.chirpDescription);
+            chirpDescription.setText(currentChirp.getChirp());
+
+            Log.d("chirptest", currentChirp.getChirp());
+            // ChirpTimeStamp:
+//            TextView chirpTimeStamp = (TextView) itemView.findViewById(R.id.chirpdate);
+//            chirpTimeStamp.setText(currentChirp.getTimePosted().toString());
+
+            return itemView;
+        }
     }
 
 //    @Override

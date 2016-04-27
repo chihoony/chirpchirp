@@ -1,7 +1,5 @@
 package jayed.triad.chirpchirp.classes;
 
-import android.util.Log;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -52,6 +50,7 @@ public class Chirp {
      * TODO: add the date stuff
      */
     public Chirp(JsonObject json) {
+        super();
         this.hashTag = new ArrayList<>();
         this.likeChirpers = new ArrayList<>();
         this.reChirpers = new ArrayList<>();
@@ -67,6 +66,7 @@ public class Chirp {
 
 
     public Chirp(String userId, String content) {
+        super();
         this.userId = userId;
         this.chirp = content;
     }

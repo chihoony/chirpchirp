@@ -1,5 +1,6 @@
 package jayed.triad.chirpchirp;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -17,9 +18,19 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.amazonaws.AmazonClientException;
+import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.mobileconnectors.lambdainvoker.LambdaFunctionException;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
+import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.internal.Constants;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+
+import java.io.File;
+import java.io.IOException;
 
 import jayed.triad.chirpchirp.classes.Account;
 import jayed.triad.chirpchirp.classes.Chirps;
@@ -270,7 +281,14 @@ public class ProfileActivity extends AppCompatActivity
 //        mAuthTask = null;
 //        showProgress(false);
 //    }
-
-
+    AWSCredentials credential = new BasicAWSCredentials("AKIAJUBTLB33CFFSTB4A","ahWBF2BbSttsjve4xuP0Px9kj6p6s0e2dWRBU5hn")
+    TransferUtility utility = 
 
 }
+
+
+
+
+
+
+

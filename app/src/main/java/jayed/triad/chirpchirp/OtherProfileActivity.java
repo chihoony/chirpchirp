@@ -82,27 +82,24 @@ public class OtherProfileActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        JsonObject otherJson = new JsonObject();
-        otherJson.addProperty("userId", otherUsername);
-        Log.d("otherusernametest", otherJson.toString());
-        otherUser = new User(Factory.getMyInterface().chirpGetUser(otherJson));
 
-        Log.d("test", "attempting to set account Id");
-        mUsername = (TextView)findViewById(R.id.username);
-        String username = otherUser.getUserId();
-        mUsername.setText(username);
-
-        String description = otherUser.getDescription();
-        mDescription = (TextView)findViewById(R.id.description);
-        mDescription.setText(description);
-
-        mProfileImage = (ImageButton)findViewById(R.id.profileImageButton);
-        new ImageLoadTask(otherUser.getProfilePicture(), mProfileImage).execute();
+//        Log.d("test", "attempting to set account Id");
+//        mUsername = (TextView)findViewById(R.id.username);
+//        String username = otherUser.getUserId();
+//        mUsername.setText(username);
+//
+//        String description = otherUser.getDescription();
+//        mDescription = (TextView)findViewById(R.id.description);
+//        mDescription.setText(description);
+//
+//        mProfileImage = (ImageButton)findViewById(R.id.profileImageButton);
+//        new ImageLoadTask(otherUser.getProfilePicture(), mProfileImage).execute();
 
 //      populateChirplist();
 
-        ChirpsTask mChirp = new ChirpsTask();
-        mChirp.execute();
+        UserTask mUser = new UserTask();
+        mUser.execute();
+
         //Log.d("test", "THIS PRINTS " + otherChirps.toString());
 
     }
@@ -190,17 +187,36 @@ public class OtherProfileActivity extends AppCompatActivity
         @Override
         protected Boolean doInBackground(Void... param) {
             try {
-
+                JsonObject otherJson = new JsonObject();
+                otherJson.addProperty("userId", otherUsername);
+                Log.d("otherusernametest", otherJson.toString());
+                otherUser = new User(Factory.getMyInterface().chirpGetUser(otherJson));
             }
             catch (LambdaFunctionException lfe) {
-
+                error = lfe.getDetails().toString();
+                Log.e("otherusernametest", lfe.getDetails(), lfe);
             }
+
+            Log.d("otherusernametest", "got other User information");
             return true;
         }
         @Override
         protected void onPostExecute(final Boolean success) {
             if(success) {
-                
+                Log.d("test", "attempting to set account Id");
+                mUsername = (TextView)findViewById(R.id.username);
+                String username = otherUser.getUserId();
+                mUsername.setText(username);
+
+                String description = otherUser.getDescription();
+                mDescription = (TextView)findViewById(R.id.description);
+                mDescription.setText(description);
+
+                mProfileImage = (ImageButton)findViewById(R.id.profileImageButton);
+                new ImageLoadTask(otherUser.getProfilePicture(), mProfileImage).execute();
+
+                ChirpsTask mChirp = new ChirpsTask();
+                mChirp.execute();
             }
 
         }

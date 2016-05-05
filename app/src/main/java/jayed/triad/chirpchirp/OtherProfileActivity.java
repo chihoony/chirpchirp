@@ -27,16 +27,21 @@ import com.google.gson.JsonObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import jayed.triad.chirpchirp.classes.Account;
 import jayed.triad.chirpchirp.classes.Chirp;
 import jayed.triad.chirpchirp.classes.Chirps;
 import jayed.triad.chirpchirp.classes.ImageLoadTask;
+import jayed.triad.chirpchirp.classes.User;
 
-public class ProfileActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+/**
+ * Created by edwardjihunlee on 16-05-05.
+ */
+public class OtherProfileActivity extends AppCompatActivity
+    implements NavigationView.OnNavigationItemSelectedListener{
 
     private ChirpsTask mChirps = null;
-    private JsonArray myChirps;
+    private User otherUser;
+    private String otherUsername;
+    private JsonArray otherChirps;
     private TextView mUsername;
     private TextView mDescription;
     private ImageButton mProfileImage;
@@ -46,6 +51,9 @@ public class ProfileActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Intent intent = getIntent();
+        otherUsername = intent.getStringExtra("key");
+        Log.d("otherusernametest", "otherUsername");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 //        setContentView(R.layout.content_profile);
@@ -59,7 +67,7 @@ public class ProfileActivity extends AppCompatActivity
 //                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
 //                        .setAction("Action", null).show();
                 for(Chirp chirp: chirps.getChirps()) {
-                    Log.d("patest", chirp.getChirp());
+                    Log.d("otherusernametest", chirp.getChirp());
                 }
                 Log.d("chirptest", Integer.toString(chirps.getChirps().size()));
                 populateListView();
@@ -74,24 +82,28 @@ public class ProfileActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        JsonObject otherJson = new JsonObject();
+        otherJson.addProperty("userId", otherUsername);
+        Log.d("otherusernametest", otherJson.toString());
+        otherUser = new User(Factory.getMyInterface().chirpGetUser(otherJson));
 
         Log.d("test", "attempting to set account Id");
         mUsername = (TextView)findViewById(R.id.username);
-        String username = Account.getAccount().getAccountId();
+        String username = otherUser.getUserId();
         mUsername.setText(username);
 
-        String description = Account.getAccount().getDescription();
+        String description = otherUser.getDescription();
         mDescription = (TextView)findViewById(R.id.description);
         mDescription.setText(description);
 
         mProfileImage = (ImageButton)findViewById(R.id.profileImageButton);
-        new ImageLoadTask(Account.getAccount().getUser().getProfilePicture(), mProfileImage).execute();
+        new ImageLoadTask(otherUser.getProfilePicture(), mProfileImage).execute();
 
 //      populateChirplist();
 
         ChirpsTask mChirp = new ChirpsTask();
         mChirp.execute();
-        //Log.d("test", "THIS PRINTS " + myChirps.toString());
+        //Log.d("test", "THIS PRINTS " + otherChirps.toString());
 
     }
 
@@ -169,7 +181,32 @@ public class ProfileActivity extends AppCompatActivity
         return true;
     }
 
-//    THIS IS WHERE THE PROFILE ACTIVITY GETS CHIRPS ASYNC
+    public class UserTask extends AsyncTask<Void, Void, Boolean> {
+        private String error;
+
+        UserTask() {
+
+        }
+        @Override
+        protected Boolean doInBackground(Void... param) {
+            try {
+
+            }
+            catch (LambdaFunctionException lfe) {
+
+            }
+            return true;
+        }
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            if(success) {
+                
+            }
+
+        }
+    }
+
+    //    THIS IS WHERE THE PROFILE ACTIVITY GETS CHIRPS ASYNC
     public class ChirpsTask extends AsyncTask<Void, Void, Boolean> {
 
         private String error;
@@ -184,26 +221,26 @@ public class ProfileActivity extends AppCompatActivity
 
             try {
                 JsonObject currentUser = new JsonObject();
-                currentUser.addProperty("userId", Account.getAccount().getAccountId());
-                JsonArray chirpsJson = Account.getAccount().getUser().getChirps();
+                currentUser.addProperty("userId", otherUser.getUserId());
+                JsonArray chirpsJson = otherUser.getChirps();
                 currentUser.add("chirps", chirpsJson);
-                myChirps = Factory.getMyInterface().chirpGetMyChirps(currentUser);
-//                JsonObject response = Factory.getMyInterface().chirpGetMyChirps(chirpsJson);
-                Log.d("patest", "try to get list of user's own chirps");
-                Log.d("patest", myChirps.toString());
-                chirps = new Chirps(myChirps);
-//                Log.d("patest", "trying to parse chirps into account");
+                otherChirps = Factory.getMyInterface().chirpGetMyChirps(currentUser);
+//                JsonObject response = Factory.getMyInterface().chirpGetotherChirps(chirpsJson);
+                Log.d("otherusernametest", "try to get list of user's own chirps");
+                Log.d("otherusernametest", otherChirps.toString());
+                chirps = new Chirps(otherChirps);
+//                Log.d("otherusernametest", "trying to parse chirps into account");
                 lochirps = chirps.getChirps();
                 // Simulate network access.
             } catch (LambdaFunctionException lfe) {
                 error = lfe.getDetails().toString();
-                Log.e("patest", lfe.getDetails(), lfe);
-                Log.e("patest", lfe.getDetails());
-                Log.e("patest", lfe.getDetails().toString());
+                Log.e("otherusernametest", lfe.getDetails(), lfe);
+                Log.e("otherusernametest", lfe.getDetails());
+                Log.e("otherusernametest", lfe.getDetails().toString());
 
             }
-            Log.d("patest", "get my chirps passed");
-            Log.d("patest", lochirps.get(0).getChirp());
+            Log.d("otherusernametest", "get my chirps passed");
+            Log.d("otherusernametest", lochirps.get(0).getChirp());
             return true;
         }
 
@@ -218,7 +255,7 @@ public class ProfileActivity extends AppCompatActivity
 
     private class MyListAdapter extends ArrayAdapter<Chirp> {
         public MyListAdapter() {
-            super(ProfileActivity.this, R.layout.content_chirprelative, lochirps);
+            super(OtherProfileActivity.this, R.layout.content_chirprelative, lochirps);
         }
 
         @Override
@@ -241,10 +278,10 @@ public class ProfileActivity extends AppCompatActivity
             chirpUsernameText.setText(currentChirp.getUserId());
             chirpUsernameText.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    Log.d("patest", currentChirp.getUserId());
-                    Intent myIntent = new Intent(ProfileActivity.this, OtherProfileActivity.class);
+                    Log.d("otherusernametest", currentChirp.getUserId());
+                    Intent myIntent = new Intent(OtherProfileActivity.this, OtherProfileActivity.class);
                     myIntent.putExtra("key", currentChirp.getUserId()); //Optional parameters
-                    ProfileActivity.this.startActivity(myIntent);
+                    OtherProfileActivity.this.startActivity(myIntent);
                 }
             });
             Log.d("chirptest", currentChirp.getUserId());

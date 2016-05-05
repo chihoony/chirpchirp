@@ -6,15 +6,23 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
  * Created by jimmychou516 on 16-04-03.
  */
-public class Chirps implements Iterable<Chirp> {
+public class Chirps {
 
     private List<Chirp> chirps;
+    private static final Comparator<Chirp> CHIRP_ORDER =
+            new Comparator<Chirp>() {
+                public int compare(Chirp c1, Chirp c2) {
+                    return (c1.getChirpId() > c2.getChirpId() ? -1 :
+                            (c1.getChirpId() == c2.getChirpId() ? 0 : 1));
+                }
+            };
 
     public Chirps(JsonArray listChirps) {
         chirps = new ArrayList<>();
@@ -28,15 +36,15 @@ public class Chirps implements Iterable<Chirp> {
         for (Chirp next : chirps) {
             Log.d("test", next.getChirp());
         }
+        sortChirps();
     }
 
     public List<Chirp> getChirps() {
         return chirps;
     }
 
-
-    @Override
-    public Iterator<Chirp> iterator() {
-        return chirps.iterator();
+    public void sortChirps() {
+        Collections.sort(chirps, CHIRP_ORDER);
     }
+
 }

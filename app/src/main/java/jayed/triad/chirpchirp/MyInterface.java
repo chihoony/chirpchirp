@@ -24,6 +24,10 @@ public interface MyInterface {
     @LambdaFunction
     JsonArray chirpGetMyChirps(JsonObject json);
 
+    @LambdaFunction
+    JsonObject chirpGetUser(JsonObject json);
+
+
 
     /**
      * Invoke lambda function "echo". The functionName in the annotation

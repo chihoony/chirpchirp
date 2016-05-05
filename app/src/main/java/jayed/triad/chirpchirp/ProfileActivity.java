@@ -41,7 +41,7 @@ public class ProfileActivity extends AppCompatActivity
     private ImageButton mProfileImage;
     private TextView mChirpDescription;
     private Chirps chirps;
-    private List<Chirp> mchirps = new ArrayList<Chirp>();
+    private List<Chirp> lochirps = new ArrayList<Chirp>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +60,8 @@ public class ProfileActivity extends AppCompatActivity
                 for(Chirp chirp: chirps) {
                     Log.d("patest", chirp.getChirp());
                 }
+                Log.d("chirptest", Integer.toString(chirps.getChirps().size()));
+                populateListView();
             }
         });
 
@@ -72,7 +74,6 @@ public class ProfileActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-
         Log.d("test", "attempting to set account Id");
         mUsername = (TextView)findViewById(R.id.username);
         String username = Account.getAccount().getAccountId();
@@ -84,12 +85,11 @@ public class ProfileActivity extends AppCompatActivity
 
         mProfileImage = (ImageButton)findViewById(R.id.profileImageButton);
         new ImageLoadTask(Account.getAccount().getUser().getProfilePicture(), mProfileImage).execute();
-        populateChirplist();
-        populateListView();
+
+//      populateChirplist();
 
         ChirpsTask mChirp = new ChirpsTask();
-        mChirp.execute((Void) null);
-        String error;
+        mChirp.execute();
         //Log.d("test", "THIS PRINTS " + myChirps.toString());
 
     }
@@ -103,13 +103,13 @@ public class ProfileActivity extends AppCompatActivity
         list.setAdapter(adapter);
     }
 
-    private void populateChirplist() {
-        mchirps.add(new Chirp("Jimmy", "0"));
-        mchirps.add(new Chirp("Ray", "1"));
-        mchirps.add(new Chirp("Edward", "2"));
-        mchirps.add(new Chirp("Jayed", "3"));
-        mchirps.add(new Chirp("Triad", "4"));
-    }
+//    private void populateChirplist() {
+//        lochirps.add(new Chirp("Jimmy", "0"));
+//        lochirps.add(new Chirp("Ray", "1"));
+//        lochirps.add(new Chirp("Edward", "2"));
+//        lochirps.add(new Chirp("Jayed", "3"));
+//        lochirps.add(new Chirp("Triad", "4"));
+//    }
 
     @Override
     public void onBackPressed() {
@@ -191,7 +191,8 @@ public class ProfileActivity extends AppCompatActivity
                 Log.d("patest", "try to get list of user's own chirps");
                 Log.d("patest", myChirps.toString());
                 chirps = new Chirps(myChirps);
-//                mchirps = chirps.getChirps();
+//                Log.d("patest", "trying to parse chirps into account");
+                lochirps = chirps.getChirps();
                 // Simulate network access.
             } catch (LambdaFunctionException lfe) {
                 error = lfe.getDetails().toString();
@@ -201,14 +202,22 @@ public class ProfileActivity extends AppCompatActivity
 
             }
             Log.d("patest", "get my chirps passed");
+            Log.d("patest", lochirps.get(0).getChirp());
             return true;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            if (success) {
+                populateListView();
+            }
         }
 
     }
 
     private class MyListAdapter extends ArrayAdapter<Chirp> {
         public MyListAdapter() {
-            super(ProfileActivity.this, R.layout.content_chirprelative, mchirps);
+            super(ProfileActivity.this, R.layout.content_chirprelative, lochirps);
         }
 
         @Override
@@ -220,7 +229,7 @@ public class ProfileActivity extends AppCompatActivity
             }
 
             // Find the car to work with.
-            Chirp currentChirp = mchirps.get(position);
+            Chirp currentChirp = lochirps.get(position);
             Log.d("chirptest", Integer.toString(position));
             // Fill the view
 //            ImageView imageView = (ImageView)itemView.findViewById(R.id.item_icon);

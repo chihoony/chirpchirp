@@ -2,25 +2,24 @@
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:padding="10dp"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
-        android:layout_weight="0.2"
-        android:scaleType="fitCenter"
-        android:id="@+id/chirpprofileImageButton"
-        android:layout_alignParentStart="true"
-        android:src="@mipmap/ic_launcher"/>
+    <!--<ImageButton-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:adjustViewBounds="true"-->
+        <!--android:layout_weight="0.2"-->
+        <!--android:scaleType="fitCenter"-->
+        <!--android:id="@+id/chirpprofileImageButton"-->
+        <!--android:layout_alignParentStart="true"-->
+        <!--android:src="@mipmap/ic_launcher"/>-->
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="0.8"
         android:id="@+id/chirpusername"
         android:text="chirpusername placeholder"
-        android:layout_toRightOf="@+id/chirpprofileImageButton"
         android:textAppearance="?android:attr/textAppearanceMedium"
         />
 

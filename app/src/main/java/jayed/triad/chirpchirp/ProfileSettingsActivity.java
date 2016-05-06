@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.graphics.Bitmap;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -42,13 +43,19 @@ import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.util.IOUtils;
+import com.google.common.io.ByteStreams;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.util.List;
 
 import jayed.triad.chirpchirp.classes.Config;
+
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -205,37 +212,30 @@ public class ProfileSettingsActivity extends AppCompatActivity {
 
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
 
-            Uri uri = data.getData();
-            Log.d("s3", data.getData().toString());
-            Uri file_uri = Uri.parse(String.valueOf(uri));
-            String real_path = getRealPathFromURI(mContext, file_uri);
-//            String real_path = "/storage/emulated/0/DCIM/Camera/IMG_20160320_142112.jpg";\
-            Log.d("s3", "this is data: " + data);
-            Log.d("s3", "the uri is " + uri);
-            Log.d("s3", "the real path is " + real_path);
+            File tempFile = new File(this.getFilesDir().getAbsolutePath(), "temp_image");
 
+            //Copy Uri contents into temp File.
+            try {
+                tempFile.createNewFile();
+                ByteStreams.copy(this.getContentResolver().openInputStream(data.getData()),new FileOutputStream(tempFile));
+            } catch (IOException e) {
+                //Log Error
+            }
+
+            //Now fetch the new URI
+            Uri newUri = Uri.fromFile(tempFile);
+
+
+            // TODO: need to specify the filename
             TransferObserver observer = transferUtility.upload(
                     "chirpprofileimages",
                     "fileName",
-                    new File(real_path)
+                    tempFile
             );
         }
     }
 
-    public String getRealPathFromURI(Context context, Uri contentUri) {
-        Cursor cursor = null;
-        try {
-            String[] proj = { MediaStore.Images.Media.DATA };
-            cursor = context.getContentResolver().query(contentUri,  proj, null, null, null);
-            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            cursor.moveToFirst();
-            return cursor.getString(column_index);
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-    }
+
 
     /**
      * This fragment shows general preferences only. It is used when the

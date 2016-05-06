@@ -58,11 +58,7 @@ public class ProfileActivity extends AppCompatActivity
             public void onClick(View view) {
 //                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
 //                        .setAction("Action", null).show();
-                for(Chirp chirp: chirps.getChirps()) {
-                    Log.d("patest", chirp.getChirp());
-                }
-                Log.d("chirptest", Integer.toString(chirps.getChirps().size()));
-                populateListView();
+                Log.d("otherusernametest", "hello");
             }
         });
 
@@ -187,6 +183,7 @@ public class ProfileActivity extends AppCompatActivity
                 currentUser.addProperty("userId", Account.getAccount().getAccountId());
                 JsonArray chirpsJson = Account.getAccount().getUser().getChirps();
                 currentUser.add("chirps", chirpsJson);
+                Log.d("otherusernametest", currentUser.toString());
                 myChirps = Factory.getMyInterface().chirpGetMyChirps(currentUser);
 //                JsonObject response = Factory.getMyInterface().chirpGetMyChirps(chirpsJson);
                 Log.d("patest", "try to get list of user's own chirps");

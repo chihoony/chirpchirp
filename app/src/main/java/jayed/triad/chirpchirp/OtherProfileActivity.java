@@ -39,6 +39,7 @@ public class OtherProfileActivity extends AppCompatActivity
     implements NavigationView.OnNavigationItemSelectedListener{
 
     private ChirpsTask mChirps = null;
+    private UserTask mUserTask = null;
     private User otherUser;
     private String otherUsername;
     private JsonArray otherChirps;
@@ -70,7 +71,6 @@ public class OtherProfileActivity extends AppCompatActivity
                     Log.d("otherusernametest", chirp.getChirp());
                 }
                 Log.d("chirptest", Integer.toString(chirps.getChirps().size()));
-                populateListView();
             }
         });
 
@@ -97,8 +97,8 @@ public class OtherProfileActivity extends AppCompatActivity
 
 //      populateChirplist();
 
-        UserTask mUser = new UserTask();
-        mUser.execute();
+        mUserTask = new UserTask();
+        mUserTask.execute();
 
         //Log.d("test", "THIS PRINTS " + otherChirps.toString());
 
@@ -203,22 +203,21 @@ public class OtherProfileActivity extends AppCompatActivity
         @Override
         protected void onPostExecute(final Boolean success) {
             if(success) {
+                lochirps.clear();
+                mChirps = new ChirpsTask();
+                mChirps.execute();
                 Log.d("test", "attempting to set account Id");
-                mUsername = (TextView)findViewById(R.id.username);
+                mUsername = (TextView) findViewById(R.id.username);
                 String username = otherUser.getUserId();
                 mUsername.setText(username);
 
                 String description = otherUser.getDescription();
-                mDescription = (TextView)findViewById(R.id.description);
+                mDescription = (TextView) findViewById(R.id.description);
                 mDescription.setText(description);
 
-                mProfileImage = (ImageButton)findViewById(R.id.profileImageButton);
+                mProfileImage = (ImageButton) findViewById(R.id.profileImageButton);
                 new ImageLoadTask(otherUser.getProfilePicture(), mProfileImage).execute();
-
-                ChirpsTask mChirp = new ChirpsTask();
-                mChirp.execute();
             }
-
         }
     }
 
@@ -228,7 +227,6 @@ public class OtherProfileActivity extends AppCompatActivity
         private String error;
 
         ChirpsTask() {
-
         }
 
         @Override
@@ -240,7 +238,8 @@ public class OtherProfileActivity extends AppCompatActivity
                 currentUser.addProperty("userId", otherUser.getUserId());
                 JsonArray chirpsJson = otherUser.getChirps();
                 currentUser.add("chirps", chirpsJson);
-                otherChirps = Factory.getMyInterface().chirpGetMyChirps(currentUser);
+                Log.d("otherusernametest", currentUser.toString());
+                otherChirps = Factory.getMyInterface().chirpOtherUsersChirps(currentUser);
 //                JsonObject response = Factory.getMyInterface().chirpGetotherChirps(chirpsJson);
                 Log.d("otherusernametest", "try to get list of user's own chirps");
                 Log.d("otherusernametest", otherChirps.toString());

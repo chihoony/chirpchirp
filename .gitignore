@@ -6,5 +6,5 @@
 .DS_Store
 /build
 /captures
-/app/src/main/java/jayed/triad/chirpchirp/Config.java
+/app/src/main/java/jayed/triad/chirpchirp/classes/Config.java
 /config.js

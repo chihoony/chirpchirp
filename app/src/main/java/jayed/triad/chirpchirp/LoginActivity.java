@@ -10,6 +10,7 @@ import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -312,7 +313,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
             if (success) {
                 finish();
-                startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+//                startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+                startActivity(new Intent(getApplicationContext(), ProfileSettingsActivity.class));
             } else if (error.equals("{\"errorMessage\":\"error_user_not_found\"}")) {
                 mUserView.setError(getString(R.string.error_user_not_found));
                 mUserView.requestFocus();

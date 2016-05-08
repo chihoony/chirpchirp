@@ -6,6 +6,8 @@ import com.amazonaws.auth.CognitoCachingCredentialsProvider;
 import com.amazonaws.mobileconnectors.lambdainvoker.LambdaInvokerFactory;
 import com.amazonaws.regions.Regions;
 
+import jayed.triad.chirpchirp.classes.Config;
+
 /**
  * Created by jimmychou516 on 16-03-20.
  */

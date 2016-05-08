@@ -72,8 +72,9 @@ import jayed.triad.chirpchirp.classes.Config;
 public class ProfileSettingsActivity extends AppCompatActivity {
     private static Context mContext;
     private int PICK_IMAGE_REQUEST = 1;
-    private String accessKey = Config.getAccessKey();
-    private String secretKey = Config.getSecretKey();
+    private Config config = new Config();
+    private String accessKey = config.getAccessKey();
+    private String secretKey = config.getSecretKey();
 
     // Storage Permissions variables
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
@@ -98,7 +99,7 @@ public class ProfileSettingsActivity extends AppCompatActivity {
         }
     }
 
-    AmazonS3 s3 = new AmazonS3Client(new BasicAWSCredentials(Config.getAccessKey(), Config.getSecretKey()));
+    AmazonS3 s3 = new AmazonS3Client(new BasicAWSCredentials(accessKey, secretKey));
 //    TransferUtility transferUtility = new TransferUtility(s3, mContext);
 
     /**

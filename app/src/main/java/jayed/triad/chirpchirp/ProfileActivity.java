@@ -1,5 +1,6 @@
 package jayed.triad.chirpchirp;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -20,16 +21,24 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.mobileconnectors.lambdainvoker.LambdaFunctionException;
+import com.amazonaws.mobileconnectors.s3.transfermanager.Transfer;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3Client;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import jayed.triad.chirpchirp.classes.Account;
 import jayed.triad.chirpchirp.classes.Chirp;
 import jayed.triad.chirpchirp.classes.Chirps;
+import jayed.triad.chirpchirp.classes.Config;
 import jayed.triad.chirpchirp.classes.ImageLoadTask;
 
 public class ProfileActivity extends AppCompatActivity
@@ -43,6 +52,11 @@ public class ProfileActivity extends AppCompatActivity
     private TextView mChirpDescription;
     private Chirps chirps;
     private List<Chirp> lochirps = new ArrayList<Chirp>();
+    private Config config = new Config();
+    private String accessKey = config.getAccessKey();
+    private String secretKey = config.getSecretKey();
+    private AmazonS3 s3 = new AmazonS3Client(new BasicAWSCredentials(accessKey, secretKey));
+    private static Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +95,19 @@ public class ProfileActivity extends AppCompatActivity
         mDescription.setText(description);
 
         mProfileImage = (ImageButton)findViewById(R.id.profileImageButton);
-        new ImageLoadTask(Account.getAccount().getUser().getProfilePicture(), mProfileImage).execute();
+//        new ImageLoadTask(Account.getAccount().getUser().getProfilePicture(), mProfileImage).execute();
+
+        // TODO: download profile image from S3 and display on the Imagebutton
+        File profileImageFile = new File(this.getFilesDir().getAbsolutePath(), "temp_image");
+        mContext = getApplicationContext();
+        TransferUtility transferUtility = new TransferUtility(s3, mContext);
+        TransferObserver observer = transferUtility.download(
+                "chirpprofileimages",
+                Account.getAccount().getAccountId(),
+                profileImageFile
+        );
+
+        new ImageLoadTask(profileImageFile.getAbsolutePath(), mProfileImage).execute();
 
 //      populateChirplist();
 

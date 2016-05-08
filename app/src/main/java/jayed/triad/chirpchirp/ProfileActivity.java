@@ -5,7 +5,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -15,24 +14,21 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
 
-import com.amazonaws.AmazonClientException;
-import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.mobileconnectors.lambdainvoker.LambdaFunctionException;
-import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
-import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.internal.Constants;
-import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-import java.io.File;
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import jayed.triad.chirpchirp.classes.Account;
+import jayed.triad.chirpchirp.classes.Chirp;
 import jayed.triad.chirpchirp.classes.Chirps;
 import jayed.triad.chirpchirp.classes.ImageLoadTask;
 
@@ -44,7 +40,9 @@ public class ProfileActivity extends AppCompatActivity
     private TextView mUsername;
     private TextView mDescription;
     private ImageButton mProfileImage;
+    private TextView mChirpDescription;
     private Chirps chirps;
+    private List<Chirp> lochirps = new ArrayList<Chirp>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,8 +56,9 @@ public class ProfileActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+                Log.d("otherusernametest", "hello");
             }
         });
 
@@ -81,65 +80,32 @@ public class ProfileActivity extends AppCompatActivity
         mDescription = (TextView)findViewById(R.id.description);
         mDescription.setText(description);
 
-//        Log.d("test", "attempting to post profileimage");
-//        URL newurl = null;
-//        Bitmap mIcon_val = null;
-//        Log.d("test", Account.getAccount().getUser().getProfilePicture());
-//        try {
-//            newurl = new URL(Account.getAccount().getUser().getProfilePicture());
-//            Log.d("test", "attempting to get profileimage url");
-//            mIcon_val = BitmapFactory.decodeStream(newurl.openConnection() .getInputStream());
-//            Log.d("test", "attempting to convert profileimage url to bitmap");
-//        } catch (MalformedURLException e) {
-//            Log.e("test", "failed to get url for image");
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        String profileImagesrc = Account.getAccount().getUser().getProfilePicture();
-//        mProfileImage = (ImageButton)findViewById(R.id.profileImageButton);
-//        if (mIcon_val != null) {
-//            mProfileImage.setImageBitmap(mIcon_val);
-//        };
-//        String profileImagesrc = Account.getAccount().getUser().getProfilePicture();
         mProfileImage = (ImageButton)findViewById(R.id.profileImageButton);
         new ImageLoadTask(Account.getAccount().getUser().getProfilePicture(), mProfileImage).execute();
-//        if (getBitmapFromURL(Account.getAccount().getUser().getProfilePicture()) != null)
-//            mProfileImage.setImageBitmap(getBitmapFromURL(Account.getAccount().getUser().getProfilePicture()));
-//        if (mIcon_val != null) {
-//            mProfileImage.setImageBitmap(mIcon_val);
-//        };
 
-
-        String error;
+//      populateChirplist();
 
         ChirpsTask mChirp = new ChirpsTask();
-        mChirp.execute((Void) null);
+        mChirp.execute();
         //Log.d("test", "THIS PRINTS " + myChirps.toString());
 
     }
 
-//    public static Bitmap getBitmapFromURL(String src) {
-//        try {
-//            Log.e("src",src);
-//            URL url = new URL(src);
-//            Log.e("src","Attemping to create url from: " + src);
-//            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-//            connection.setDoInput(true);
-//            Log.e("src","3");
-//            connection.connect();
-//            Log.e("src","2");
-//            InputStream input = connection.getInputStream();
-//            Log.e("src","1");
-//            Bitmap myBitmap = BitmapFactory.decodeStream(input);
-//            Log.e("src","Attempting with Bitmap conversion: " + src);
-//            Log.e("Bitmap","returned");
-//            return myBitmap;
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            Log.e("Exception",e.getMessage());
-//            return null;
-//        }
+    private void populateListView() {
+        Log.d("chirptest", "1");
+        ArrayAdapter<Chirp> adapter = new MyListAdapter();
+        Log.d("chirptest", "2");
+        ListView list = (ListView) findViewById(R.id.chirpsListView);
+        Log.d("chirptest", "3");
+        list.setAdapter(adapter);
+    }
+
+//    private void populateChirplist() {
+//        lochirps.add(new Chirp("Jimmy", "0"));
+//        lochirps.add(new Chirp("Ray", "1"));
+//        lochirps.add(new Chirp("Edward", "2"));
+//        lochirps.add(new Chirp("Jayed", "3"));
+//        lochirps.add(new Chirp("Triad", "4"));
 //    }
 
     @Override
@@ -199,6 +165,7 @@ public class ProfileActivity extends AppCompatActivity
         return true;
     }
 
+    //    THIS IS WHERE THE PROFILE ACTIVITY GETS CHIRPS ASYNC
     public class ChirpsTask extends AsyncTask<Void, Void, Boolean> {
 
         private String error;
@@ -212,27 +179,84 @@ public class ProfileActivity extends AppCompatActivity
             // TODO: attempt authentication against a network service.
 
             try {
+                JsonObject currentUser = new JsonObject();
+                currentUser.addProperty("userId", Account.getAccount().getAccountId());
                 JsonArray chirpsJson = Account.getAccount().getUser().getChirps();
-                Log.d("test", chirpsJson.toString());
-                JsonObject response = Factory.getMyInterface().chirpRegister(chirpsJson);
+                currentUser.add("chirps", chirpsJson);
+                Log.d("otherusernametest", currentUser.toString());
+                myChirps = Factory.getMyInterface().chirpGetMyChirps(currentUser);
 //                JsonObject response = Factory.getMyInterface().chirpGetMyChirps(chirpsJson);
-                Log.d("test", "try to get list of user's own chirps");
-                Log.d("test", response.toString());
-                myChirps = response.getAsJsonObject("Responses").getAsJsonArray("Chirp");
+                Log.d("patest", "try to get list of user's own chirps");
+                Log.d("patest", myChirps.toString());
                 chirps = new Chirps(myChirps);
+//                Log.d("patest", "trying to parse chirps into account");
+                lochirps = chirps.getChirps();
                 // Simulate network access.
             } catch (LambdaFunctionException lfe) {
                 error = lfe.getDetails().toString();
-                Log.e("test", lfe.getDetails(), lfe);
-                Log.e("test", lfe.getDetails());
-                Log.e("test", lfe.getDetails().toString());
+                Log.e("patest", lfe.getDetails(), lfe);
+                Log.e("patest", lfe.getDetails());
+                Log.e("patest", lfe.getDetails().toString());
 
             }
-            Log.d("test", "get my chirps passed");
-
+            Log.d("patest", "get my chirps passed");
+            Log.d("patest", lochirps.get(0).getChirp());
             return true;
         }
 
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            if (success) {
+                populateListView();
+            }
+        }
+
+    }
+
+    private class MyListAdapter extends ArrayAdapter<Chirp> {
+        public MyListAdapter() {
+            super(ProfileActivity.this, R.layout.content_chirprelative, lochirps);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            // Make sure we have a view to work with (may have been given null)
+            View itemView = convertView;
+            if (itemView == null) {
+                itemView = getLayoutInflater().inflate(R.layout.content_chirprelative, parent, false);
+            }
+
+            // Find the car to work with.
+            final Chirp currentChirp = lochirps.get(position);
+            Log.d("chirptest", Integer.toString(position));
+            // Fill the view
+//            ImageView imageView = (ImageView)itemView.findViewById(R.id.item_icon);
+//            imageView.setImageResource(currentCar.getIconID());
+
+            // ChirpUsername:
+            TextView chirpUsernameText = (TextView) itemView.findViewById(R.id.chirpusername);
+            chirpUsernameText.setText(currentChirp.getUserId());
+            chirpUsernameText.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    Log.d("patest", currentChirp.getUserId());
+                    Intent myIntent = new Intent(ProfileActivity.this, OtherProfileActivity.class);
+                    myIntent.putExtra("key", currentChirp.getUserId()); //Optional parameters
+                    ProfileActivity.this.startActivity(myIntent);
+                }
+            });
+            Log.d("chirptest", currentChirp.getUserId());
+            Log.d("chirptest", "trying to get chirp username");
+            // ChirpDescription:
+            TextView chirpDescription = (TextView) itemView.findViewById(R.id.chirpDescription);
+            chirpDescription.setText(currentChirp.getChirp());
+
+            Log.d("chirptest", currentChirp.getChirp());
+            // ChirpTimeStamp:
+//            TextView chirpTimeStamp = (TextView) itemView.findViewById(R.id.chirpdate);
+//            chirpTimeStamp.setText(currentChirp.getTimePosted().toString());
+
+            return itemView;
+        }
     }
 
 //    @Override
@@ -283,11 +307,5 @@ public class ProfileActivity extends AppCompatActivity
 //    }
 
 
+
 }
-
-
-
-
-
-
-

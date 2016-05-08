@@ -54,6 +54,7 @@ import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.util.List;
 
+import jayed.triad.chirpchirp.classes.Account;
 import jayed.triad.chirpchirp.classes.Config;
 
 
@@ -225,13 +226,16 @@ public class ProfileSettingsActivity extends AppCompatActivity {
             //Now fetch the new URI
             Uri newUri = Uri.fromFile(tempFile);
 
+            String fileName = Account.getAccount().getAccountId();
 
-            // TODO: need to specify the filename
             TransferObserver observer = transferUtility.upload(
                     "chirpprofileimages",
-                    "fileName",
+                    fileName, // fileName = Account ID
                     tempFile
             );
+
+
+
         }
     }
 

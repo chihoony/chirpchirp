@@ -59,6 +59,7 @@ public class ProfileActivity extends AppCompatActivity
 //                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
 //                        .setAction("Action", null).show();
                 Log.d("otherusernametest", "hello");
+                startActivity(new Intent(getApplicationContext(), PostChirpActivity.class));
             }
         });
 

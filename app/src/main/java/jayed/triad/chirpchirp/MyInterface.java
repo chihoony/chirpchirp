@@ -30,6 +30,8 @@ public interface MyInterface {
     @LambdaFunction
     JsonArray chirpOtherUsersChirps(JsonObject json);
 
+    @LambdaFunction
+    JsonObject chirpPostNewChirp(JsonObject json);
 
 
     /**

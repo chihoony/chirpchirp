@@ -9,9 +9,10 @@ public class Config {
     private static String secretKey;
 
     public Config() {
-        this.keyValue = "us-east-1:582ced83-5008-4a52-9882-2ccd48cb49fb";
-        this.accessKey = "AKIAIUMVOIGB4MUZNRIA";
-        this.secretKey = "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";
+//        this.keyValue = "us-east-1:582ced83-5008-4a52-9882-2ccd48cb49fb";
+        this.keyValue = "us-east-1:277eee66-cdc3-4331-a958-1af7da59aa2a";
+        this.accessKey = "AKIAIF3VI2OVFINYMULA";
+        this.secretKey = "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";
     }
 
     public String getKeyValue() {

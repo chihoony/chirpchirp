@@ -23,22 +23,17 @@ import android.widget.TextView;
 
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.mobileconnectors.lambdainvoker.LambdaFunctionException;
-import com.amazonaws.mobileconnectors.s3.transfermanager.Transfer;
-import com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver;
-import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import jayed.triad.chirpchirp.classes.Account;
 import jayed.triad.chirpchirp.classes.Chirp;
 import jayed.triad.chirpchirp.classes.Chirps;
-import jayed.triad.chirpchirp.Config;
 import jayed.triad.chirpchirp.classes.ImageLoadTask;
 
 public class ProfileActivity extends AppCompatActivity
@@ -99,16 +94,16 @@ public class ProfileActivity extends AppCompatActivity
 //        new ImageLoadTask(Account.getAccount().getUser().getProfilePicture(), mProfileImage).execute();
 
         // TODO: download profile image from S3 and display on the Imagebutton
-        File profileImageFile = new File(this.getFilesDir().getAbsolutePath(), "temp_image");
-        mContext = getApplicationContext();
-        TransferUtility transferUtility = new TransferUtility(s3, mContext);
-        TransferObserver observer = transferUtility.download(
-                "chirpprofileimages",
-                Account.getAccount().getAccountId(),
-                profileImageFile
-        );
+//        File profileImageFile = new File(this.getFilesDir().getAbsolutePath(), "temp_image");
+//        mContext = getApplicationContext();
+//        TransferUtility transferUtility = new TransferUtility(s3, mContext);
+//        TransferObserver observer = transferUtility.download(
+//                "chirpprofileimages",
+//                Account.getAccount().getAccountId(),
+//                profileImageFile
+//        );
 
-        new ImageLoadTask(profileImageFile.getAbsolutePath(), mProfileImage).execute();
+        new ImageLoadTask("https://s3.amazonaws.com/chirpprofileimages/" + Account.getAccount().getAccountId(), mProfileImage).execute();
 
 //      populateChirplist();
 
@@ -213,7 +208,7 @@ public class ProfileActivity extends AppCompatActivity
                 currentUser.add("chirps", chirpsJson);
                 Log.d("otherusernametest", currentUser.toString());
 //                myChirps = new JsonArray();
-//                Log.d("pa1test", Factory.getMyInterface().chirpGetMyChirps(currentUser).toString());
+                Log.d("viewuser", Factory.getMyInterface().chirpGetMyChirps(currentUser).toString());
                 myChirps = Factory.getMyInterface().chirpGetMyChirps(currentUser);
 //                JsonObject response = Factory.getMyInterface().chirpGetMyChirps(chirpsJson);
                 Log.d("patest", "try to get list of user's own chirps");
@@ -232,7 +227,6 @@ public class ProfileActivity extends AppCompatActivity
 
             }
             Log.d("patest", "get my chirps passed");
-            Log.d("patest", lochirps.get(0).getChirp());
             return true;
         }
 
@@ -268,9 +262,10 @@ public class ProfileActivity extends AppCompatActivity
             // ChirpUsername:
             TextView chirpUsernameText = (TextView) itemView.findViewById(R.id.chirpusername);
             chirpUsernameText.setText(currentChirp.getUserId());
+            Log.d("viewuser", currentChirp.getUserId());
             chirpUsernameText.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    Log.d("patest", currentChirp.getUserId());
+                    Log.d("viewuser", currentChirp.getUserId());
                     Intent myIntent = new Intent(ProfileActivity.this, OtherProfileActivity.class);
                     myIntent.putExtra("key", currentChirp.getUserId()); //Optional parameters
                     ProfileActivity.this.startActivity(myIntent);

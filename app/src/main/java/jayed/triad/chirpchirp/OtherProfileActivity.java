@@ -246,6 +246,7 @@ public class OtherProfileActivity extends AppCompatActivity
                 currentUser.add("chirps", chirpsJson);
                 Log.d("otherusernametest", currentUser.toString());
                 this.otherChirps = Factory.getMyInterface().chirpOtherUserChirps(currentUser);
+                Log.d("testtest", this.otherChirps.toString());
 //                JsonObject response = Factory.getMyInterface().chirpGetotherChirps(chirpsJson);
                 Log.d("otherusernametest", "try to get list of user's own chirps");
                 Log.d("otherusernametest1", otherChirps.toString());
@@ -263,8 +264,6 @@ public class OtherProfileActivity extends AppCompatActivity
 
             }
             Log.d("otherusernametest", "get my chirps passed");
-            Log.d("otherusernametest", lochirps.get(0).getChirp());
-            Log.d("otherusernametest1", lochirps.get(1).getUserId());
             return true;
         }
 
@@ -279,7 +278,7 @@ public class OtherProfileActivity extends AppCompatActivity
 
     private class MyListAdapter extends ArrayAdapter<Chirp> {
         public MyListAdapter() {
-            super(OtherProfileActivity.this, R.layout.content_chirprelative, lochirps);
+            super(OtherProfileActivity.this, R.layout.content_otherchirprelative, lochirps);
         }
 
         @Override
@@ -287,7 +286,7 @@ public class OtherProfileActivity extends AppCompatActivity
             // Make sure we have a view to work with (may have been given null)
             View itemView = convertView;
             if (itemView == null) {
-                itemView = getLayoutInflater().inflate(R.layout.content_chirprelative, parent, false);
+                itemView = getLayoutInflater().inflate(R.layout.content_otherchirprelative, parent, false);
             }
 
             // Find the chirp to work with.
@@ -300,6 +299,7 @@ public class OtherProfileActivity extends AppCompatActivity
             // ChirpUsername:
             TextView chirpUsernameText = (TextView) itemView.findViewById(R.id.chirpusername);
             chirpUsernameText.setText(currentChirp.getUserId());
+            Log.d("viewuser", currentChirp.getUserId());
             chirpUsernameText.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     Log.d("otherusernametest", currentChirp.getUserId());

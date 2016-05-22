@@ -28,7 +28,7 @@ public interface MyInterface {
     JsonObject chirpGetUser(JsonObject json);
 
     @LambdaFunction
-    JsonArray chirpOtherUsersChirps(JsonObject json);
+    JsonArray chirpOtherUserChirps(JsonObject json);
 
 
 

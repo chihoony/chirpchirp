@@ -60,7 +60,7 @@ public class Chirp {
         setChirpId(json.get("chirpId").getAsInt());
         setChirp(json.get("chirp").getAsString());
         setUserId(json.get("userId").getAsString());
-        setShowStatus(json.get("display").getAsBoolean());
+        setShowStatus(json.get("toShow").getAsBoolean());
         setReChirpers(json.getAsJsonArray("reChirpers")); // need to loop through to parse
     }
 

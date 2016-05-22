@@ -48,7 +48,7 @@ public class OtherProfileActivity extends AppCompatActivity
     private ImageButton mProfileImage;
     private TextView mChirpDescription;
     private Chirps chirps;
-    private List<Chirp> lochirps = new ArrayList<Chirp>();
+    private List<Chirp> lochirps;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +74,8 @@ public class OtherProfileActivity extends AppCompatActivity
             }
         });
 
+        lochirps = new ArrayList<Chirp>();
+        otherChirps = new JsonArray();
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -96,7 +98,6 @@ public class OtherProfileActivity extends AppCompatActivity
 //        new ImageLoadTask(otherUser.getProfilePicture(), mProfileImage).execute();
 
 //      populateChirplist();
-
         mUserTask = new UserTask();
         mUserTask.execute();
 
@@ -203,8 +204,9 @@ public class OtherProfileActivity extends AppCompatActivity
         @Override
         protected void onPostExecute(final Boolean success) {
             if(success) {
+                if (lochirps != null)
                 lochirps.clear();
-                mChirps = new ChirpsTask();
+                mChirps = new ChirpsTask(otherChirps);
                 mChirps.execute();
                 Log.d("test", "attempting to set account Id");
                 mUsername = (TextView) findViewById(R.id.username);
@@ -225,8 +227,11 @@ public class OtherProfileActivity extends AppCompatActivity
     public class ChirpsTask extends AsyncTask<Void, Void, Boolean> {
 
         private String error;
+        private JsonArray otherChirps;
 
-        ChirpsTask() {
+        ChirpsTask(JsonArray otherChirps) {
+            lochirps = new ArrayList<Chirp>();
+            this.otherChirps = otherChirps;
         }
 
         @Override
@@ -239,12 +244,14 @@ public class OtherProfileActivity extends AppCompatActivity
                 JsonArray chirpsJson = otherUser.getChirps();
                 currentUser.add("chirps", chirpsJson);
                 Log.d("otherusernametest", currentUser.toString());
-                otherChirps = Factory.getMyInterface().chirpOtherUsersChirps(currentUser);
+                this.otherChirps = Factory.getMyInterface().chirpOtherUserChirps(currentUser);
 //                JsonObject response = Factory.getMyInterface().chirpGetotherChirps(chirpsJson);
                 Log.d("otherusernametest", "try to get list of user's own chirps");
-                Log.d("otherusernametest", otherChirps.toString());
+                Log.d("otherusernametest1", otherChirps.toString());
                 chirps = new Chirps(otherChirps);
 //                Log.d("otherusernametest", "trying to parse chirps into account");
+                if (lochirps != null)
+                lochirps.clear();
                 lochirps = chirps.getChirps();
                 // Simulate network access.
             } catch (LambdaFunctionException lfe) {
@@ -256,6 +263,7 @@ public class OtherProfileActivity extends AppCompatActivity
             }
             Log.d("otherusernametest", "get my chirps passed");
             Log.d("otherusernametest", lochirps.get(0).getChirp());
+            Log.d("otherusernametest1", lochirps.get(1).getUserId());
             return true;
         }
 
@@ -281,7 +289,7 @@ public class OtherProfileActivity extends AppCompatActivity
                 itemView = getLayoutInflater().inflate(R.layout.content_chirprelative, parent, false);
             }
 
-            // Find the car to work with.
+            // Find the chirp to work with.
             final Chirp currentChirp = lochirps.get(position);
             Log.d("chirptest", Integer.toString(position));
             // Fill the view
@@ -309,58 +317,7 @@ public class OtherProfileActivity extends AppCompatActivity
             // ChirpTimeStamp:
 //            TextView chirpTimeStamp = (TextView) itemView.findViewById(R.id.chirpdate);
 //            chirpTimeStamp.setText(currentChirp.getTimePosted().toString());
-
             return itemView;
         }
     }
-
-//    @Override
-//    protected Boolean doInBackground(Void... params) {
-//        // TODO: attempt authentication against a network service.
-//        try {
-//            JsonObject json = new JsonObject();
-//            json.addProperty("userId", mUser);
-//            json.addProperty("password", mPassword);
-//            JsonObject response = Factory.getMyInterface().chirpLogin(json);
-//            Log.d("test", "login working");
-//            Log.d("test", response.toString());
-//            Account.getInstance(response); // parse userId into singleton
-//            // Simulate network access.
-//        } catch (LambdaFunctionException lfe) {
-//            error = lfe.getDetails().toString();
-//            Log.e("test", lfe.getDetails(), lfe);
-//            Log.e("test", lfe.getDetails());
-//            return false;
-//
-//            // TODO: register the new account here.
-//        }
-//        Log.d("test", "login passed");
-//        return true;
-//    }
-
-//    @Override
-//    protected void onPostExecute(final Boolean success) {
-//        mAuthTask = null;
-//        showProgress(false);
-//
-//        if (success) {
-//            startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
-//        } else if (error.equals("{\"errorMessage\":\"error_user_not_found\"}")) {
-//            mUserView.setError(getString(R.string.error_user_not_found));
-//            mUserView.requestFocus();
-//        } else {
-//            mPasswordView.setError(getString(R.string.error_incorrect_password));
-//            mPasswordView.requestFocus();
-//        }
-//
-//    }
-//
-//    @Override
-//    protected void onCancelled() {
-//        mAuthTask = null;
-//        showProgress(false);
-//    }
-
-
-
 }

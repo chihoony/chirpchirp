@@ -38,7 +38,7 @@ import java.util.List;
 import jayed.triad.chirpchirp.classes.Account;
 import jayed.triad.chirpchirp.classes.Chirp;
 import jayed.triad.chirpchirp.classes.Chirps;
-import jayed.triad.chirpchirp.classes.Config;
+import jayed.triad.chirpchirp.Config;
 import jayed.triad.chirpchirp.classes.ImageLoadTask;
 
 public class ProfileActivity extends AppCompatActivity
@@ -51,12 +51,12 @@ public class ProfileActivity extends AppCompatActivity
     private ImageButton mProfileImage;
     private TextView mChirpDescription;
     private Chirps chirps;
-    private List<Chirp> lochirps = new ArrayList<Chirp>();
     private Config config = new Config();
     private String accessKey = config.getAccessKey();
     private String secretKey = config.getSecretKey();
     private AmazonS3 s3 = new AmazonS3Client(new BasicAWSCredentials(accessKey, secretKey));
     private static Context mContext;
+    private List<Chirp> lochirps;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -197,7 +197,7 @@ public class ProfileActivity extends AppCompatActivity
         private String error;
 
         ChirpsTask() {
-
+            lochirps = new ArrayList<Chirp>();
         }
 
         @Override
@@ -208,14 +208,19 @@ public class ProfileActivity extends AppCompatActivity
                 JsonObject currentUser = new JsonObject();
                 currentUser.addProperty("userId", Account.getAccount().getAccountId());
                 JsonArray chirpsJson = Account.getAccount().getUser().getChirps();
+                Log.d("patest", chirpsJson.toString());
                 currentUser.add("chirps", chirpsJson);
                 Log.d("otherusernametest", currentUser.toString());
+//                myChirps = new JsonArray();
+//                Log.d("pa1test", Factory.getMyInterface().chirpGetMyChirps(currentUser).toString());
                 myChirps = Factory.getMyInterface().chirpGetMyChirps(currentUser);
 //                JsonObject response = Factory.getMyInterface().chirpGetMyChirps(chirpsJson);
                 Log.d("patest", "try to get list of user's own chirps");
                 Log.d("patest", myChirps.toString());
                 chirps = new Chirps(myChirps);
 //                Log.d("patest", "trying to parse chirps into account");
+                if (lochirps != null)
+                lochirps.clear();
                 lochirps = chirps.getChirps();
                 // Simulate network access.
             } catch (LambdaFunctionException lfe) {
@@ -284,54 +289,4 @@ public class ProfileActivity extends AppCompatActivity
             return itemView;
         }
     }
-
-//    @Override
-//    protected Boolean doInBackground(Void... params) {
-//        // TODO: attempt authentication against a network service.
-//        try {
-//            JsonObject json = new JsonObject();
-//            json.addProperty("userId", mUser);
-//            json.addProperty("password", mPassword);
-//            JsonObject response = Factory.getMyInterface().chirpLogin(json);
-//            Log.d("test", "login working");
-//            Log.d("test", response.toString());
-//            Account.getInstance(response); // parse userId into singleton
-//            // Simulate network access.
-//        } catch (LambdaFunctionException lfe) {
-//            error = lfe.getDetails().toString();
-//            Log.e("test", lfe.getDetails(), lfe);
-//            Log.e("test", lfe.getDetails());
-//            return false;
-//
-//            // TODO: register the new account here.
-//        }
-//        Log.d("test", "login passed");
-//        return true;
-//    }
-
-//    @Override
-//    protected void onPostExecute(final Boolean success) {
-//        mAuthTask = null;
-//        showProgress(false);
-//
-//        if (success) {
-//            startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
-//        } else if (error.equals("{\"errorMessage\":\"error_user_not_found\"}")) {
-//            mUserView.setError(getString(R.string.error_user_not_found));
-//            mUserView.requestFocus();
-//        } else {
-//            mPasswordView.setError(getString(R.string.error_incorrect_password));
-//            mPasswordView.requestFocus();
-//        }
-//
-//    }
-//
-//    @Override
-//    protected void onCancelled() {
-//        mAuthTask = null;
-//        showProgress(false);
-//    }
-
-
-
 }

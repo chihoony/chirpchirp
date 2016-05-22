@@ -39,7 +39,6 @@ public class OtherProfileActivity extends AppCompatActivity
     implements NavigationView.OnNavigationItemSelectedListener{
 
     private ChirpsTask mChirps = null;
-    private UserTask mUserTask = null;
     private User otherUser;
     private String otherUsername;
     private JsonArray otherChirps;
@@ -67,10 +66,12 @@ public class OtherProfileActivity extends AppCompatActivity
             public void onClick(View view) {
 //                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
 //                        .setAction("Action", null).show();
-                for(Chirp chirp: chirps.getChirps()) {
-                    Log.d("otherusernametest", chirp.getChirp());
-                }
-                Log.d("chirptest", Integer.toString(chirps.getChirps().size()));
+//                for(Chirp chirp: chirps.getChirps()) {
+//                    Log.d("otherusernametest", chirp.getChirp());
+//                }
+//                Log.d("chirptest", Integer.toString(chirps.getChirps().size()));
+//                populateListView();
+                Log.d("test", "Other PROFILE ACTIVITY");
             }
         });
 
@@ -98,7 +99,7 @@ public class OtherProfileActivity extends AppCompatActivity
 //        new ImageLoadTask(otherUser.getProfilePicture(), mProfileImage).execute();
 
 //      populateChirplist();
-        mUserTask = new UserTask();
+        UserTask mUserTask = new UserTask();
         mUserTask.execute();
 
         //Log.d("test", "THIS PRINTS " + otherChirps.toString());

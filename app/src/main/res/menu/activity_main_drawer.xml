@@ -4,7 +4,7 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_timeline"
-            android:icon="@mipmap/timeline_launcher"
+            android:icon="@mipmap/main_launcher"
             android:title="Timeline" />
         <item
             android:id="@+id/nav_profile"

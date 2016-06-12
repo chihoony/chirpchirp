@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
@@ -19,18 +19,36 @@
         app:menu="@menu/activity_main_drawer"
         android:visibility="gone" />
 
-    <ImageView
-        android:layout_width="148dp"
-        android:layout_height="0dp"
-        android:scaleType="fitCenter"
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:id="@+id/profile_image_view"
-        android:layout_weight="0.29" />
+        android:layout_alignWithParentIfMissing="false"
+        android:src="@mipmap/ic_launcher"
+        android:layout_marginTop="62dp"
+        android:layout_below="@+id/nav_view"
+        android:layout_centerHorizontal="true" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Upload your profile image!"
-        android:id="@+id/upload_profile_image_button" />
-</LinearLayout>
+        android:id="@+id/upload_profile_image_button"
+        android:layout_below="@+id/profile_image_view"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:text="Do you want to logout? We will miss you"
+        android:id="@+id/logout_button"
+        android:layout_weight="0.02"
+        android:layout_gravity="center_horizontal"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="39dp" />
+
+</RelativeLayout>
 

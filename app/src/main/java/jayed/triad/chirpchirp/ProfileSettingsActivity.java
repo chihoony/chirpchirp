@@ -31,6 +31,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.amazonaws.auth.BasicAWSCredentials;
@@ -68,7 +69,8 @@ public class ProfileSettingsActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
-    private ImageView mProfileImage;
+    private ImageButton mProfileImageButton;
+    private Button mLogoutButton;
 
     // Storage Permissions variables
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
@@ -200,14 +202,23 @@ public class ProfileSettingsActivity extends AppCompatActivity {
             }
         });
 
-        mProfileImage = (ImageView) findViewById(R.id.profile_image_view);
-        new ImageLoadTask("https://s3.amazonaws.com/chirpprofileimages/" + Account.getAccount().getAccountId(), mProfileImage).execute();
+        mProfileImageButton = (ImageButton) findViewById(R.id.profile_image_view);
+        new ImageLoadTask("https://s3.amazonaws.com/chirpprofileimages/" + Account.getAccount().getAccountId(), mProfileImageButton).execute();
 
 
         // Initializing Toolbar and setting it as the actionbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        mLogoutButton = (Button) findViewById(R.id.logout_button);
+        mLogoutButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                finish();
+                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
+            }
+        });
 
         // Initializing Drawer Layout and ActionBarToggle
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);

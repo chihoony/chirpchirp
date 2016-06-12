@@ -73,6 +73,7 @@ public class ProfileActivity extends AppCompatActivity
             }
         });
 
+<<<<<<< HEAD
         Button b = (Button) findViewById(R.id.search_view_button);
         b.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,9 +87,36 @@ public class ProfileActivity extends AppCompatActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+=======
+
+>>>>>>> task/drawer
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        // Initializing Drawer Layout and ActionBarToggle
+        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close){
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                // Code here will be triggered once the drawer closes as we dont want anything to happen so we leave this blank
+                super.onDrawerClosed(drawerView);
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                // Code here will be triggered once the drawer open as we dont want anything to happen so we leave this blank
+                drawerView.bringToFront();
+                super.onDrawerOpened(drawerView);
+            }
+        };
+
+        //Setting the actionbarToggle to drawer layout
+        drawerLayout.setDrawerListener(actionBarDrawerToggle);
+
+        //calling sync state is necessay or else your hamburger icon wont show up
+        actionBarDrawerToggle.syncState();
 
         Log.d("test", "attempting to set account Id");
         mUsername = (TextView)findViewById(R.id.username);
@@ -103,6 +131,8 @@ public class ProfileActivity extends AppCompatActivity
 //        new ImageLoadTask(Account.getAccount().getUser().getProfilePicture(), mProfileImage).execute();
 
         // TODO: download profile image from S3 and display on the Imagebutton
+
+        // REDUNDANT
 //        File profileImageFile = new File(this.getFilesDir().getAbsolutePath(), "temp_image");
 //        mContext = getApplicationContext();
 //        TransferUtility transferUtility = new TransferUtility(s3, mContext);
@@ -177,18 +207,13 @@ public class ProfileActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_timeline) {
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+        } else if (id == R.id.nav_profile) {
+            startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+        } else if (id == R.id.nav_settings) {
+            startActivity(new Intent(getApplicationContext(), ProfileSettingsActivity.class));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

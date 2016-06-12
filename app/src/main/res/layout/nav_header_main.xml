@@ -17,7 +17,6 @@
         android:layout_height="70dp"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
         android:src="@drawable/ic_menu_default" />
-    <!--android:src="@android:drawable/sym_def_app_icon" -->
 
     <TextView
         android:layout_width="match_parent"

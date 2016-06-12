@@ -72,6 +72,8 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.nav_settings:
                         startActivity(new Intent(getApplicationContext(), ProfileSettingsActivity.class));
                         return true;
+                    case R.id.nav_search:
+                        startActivity(new Intent(getApplicationContext(), SearchActivity.class));
                     default:
                         return true;
 

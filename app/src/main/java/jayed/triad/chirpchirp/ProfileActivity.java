@@ -309,8 +309,9 @@ public class ProfileActivity extends AppCompatActivity
 
             Log.d("chirptest", currentChirp.getChirp());
             // ChirpTimeStamp:
-//            TextView chirpTimeStamp = (TextView) itemView.findViewById(R.id.chirpdate);
-//            chirpTimeStamp.setText(currentChirp.getTimePosted().toString());
+            TextView chirpTimeStamp = (TextView) itemView.findViewById(R.id.chirptimeposted);
+            chirpTimeStamp.setText(currentChirp.getTimePosted());
+            Log.d("chirptest", currentChirp.getTimePosted());
 
             return itemView;
         }

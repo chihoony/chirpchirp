@@ -61,6 +61,9 @@ public class Chirp {
         setUserId(json.get("userId").getAsString());
         setShowStatus(json.get("toShow").getAsBoolean());
         setReChirpers(json.getAsJsonArray("reChirpers")); // need to loop through to parse
+        if (json.get("postDate") != null)
+        setTimePosted(json.get("postDate").getAsString());
+        else setTimePosted(null);
     }
 
 
@@ -154,7 +157,9 @@ public class Chirp {
     }
 
     public void setTimePosted(String timePosted) {
+        if (timePosted != null)
         this.timePosted = timePosted;
+        else this.timePosted = "Edward, the ruler of time";
     }
 
     @Override

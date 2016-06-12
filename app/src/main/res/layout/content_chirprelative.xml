@@ -34,7 +34,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/chirpdate"
+        android:id="@+id/chirptimeposted"
         android:text="chirpDATE 1111/11/11 with time"
         android:layout_below="@+id/chirpDescription"
         android:layout_alignStart="@+id/chirpDescription"/>

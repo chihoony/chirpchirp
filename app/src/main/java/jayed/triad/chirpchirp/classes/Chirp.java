@@ -158,8 +158,23 @@ public class Chirp {
         this.timePosted = timePosted;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
 
-//    private String firstName;
+        Chirp chirp = (Chirp) o;
+
+        return chirpId == chirp.chirpId;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return chirpId;
+    }
+
+    //    private String firstName;
 //    private String lastName;
 //
 //    public NameInfo() {}

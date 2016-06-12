@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -69,6 +70,14 @@ public class ProfileActivity extends AppCompatActivity
 //                        .setAction("Action", null).show();
                 Log.d("otherusernametest", "hello");
                 startActivity(new Intent(getApplicationContext(), PostChirpActivity.class));
+            }
+        });
+
+        Button b = (Button) findViewById(R.id.search_view_button);
+        b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), SearchActivity.class));
             }
         });
 

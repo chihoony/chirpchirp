@@ -5,7 +5,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -18,7 +17,7 @@ public class Chirp {
     private String userId;
     private int viewCount;
     private boolean showStatus;
-    private Date timePosted;
+    private String timePosted;
     private List<String> hashTag;
     private List<String> likeChirpers;
     private List<String> reChirpers;
@@ -150,11 +149,11 @@ public class Chirp {
         this.showStatus = showStatus;
     }
 
-    public Date getTimePosted() {
+    public String getTimePosted() {
         return timePosted;
     }
 
-    public void setTimePosted(Date timePosted) {
+    public void setTimePosted(String timePosted) {
         this.timePosted = timePosted;
     }
 

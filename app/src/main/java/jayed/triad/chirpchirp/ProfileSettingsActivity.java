@@ -215,6 +215,7 @@ public class ProfileSettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent();
+                Account.getAccount().reset();
                 finish();
                 startActivity(new Intent(getApplicationContext(), LoginActivity.class));
             }
@@ -311,16 +312,6 @@ public class ProfileSettingsActivity extends AppCompatActivity {
                     fileName, // fileName = Account ID
                     tempFile
             );
-
-//            ExifInterface exif = null;
-//            try {
-//                exif = new ExifInterface(fileName);
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//            int rotation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
-
-
 
 
         }

@@ -61,7 +61,6 @@ public class ProfileActivity extends AppCompatActivity
 //        setContentView(R.layout.content_profile);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -312,6 +311,10 @@ public class ProfileActivity extends AppCompatActivity
             TextView chirpTimeStamp = (TextView) itemView.findViewById(R.id.chirptimeposted);
             chirpTimeStamp.setText(currentChirp.getTimePosted());
             Log.d("chirptest", currentChirp.getTimePosted());
+
+            TextView chirpLikeCount = (TextView) itemView.findViewById(R.id.likecount);
+            if (!currentChirp.getLikeChirpers().isEmpty())
+            chirpLikeCount.setText(String.valueOf(currentChirp.getLikeChirpers().size()));
 
             return itemView;
         }

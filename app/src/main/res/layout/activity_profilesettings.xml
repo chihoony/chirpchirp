@@ -5,7 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
-    tools:context="jayed.triad.chirpchirp.ProfileSettingsActivity">
+    tools:context="jayed.triad.chirpchirp.ProfileSettingsActivity"
+    android:weightSum="1">
+
+    <ImageView
+        android:layout_width="148dp"
+        android:layout_height="0dp"
+        android:scaleType="fitCenter"
+        android:id="@+id/profile_image_view"
+        android:layout_weight="0.29" />
 
     <Button
         style="?android:attr/buttonStyleSmall"

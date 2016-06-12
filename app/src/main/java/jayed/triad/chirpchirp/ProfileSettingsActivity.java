@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.media.ExifInterface;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -30,6 +31,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver;
@@ -43,6 +45,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 import jayed.triad.chirpchirp.classes.Account;
+import jayed.triad.chirpchirp.classes.ImageLoadTask;
 
 
 /**
@@ -65,6 +68,7 @@ public class ProfileSettingsActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
+    private ImageView mProfileImage;
 
     // Storage Permissions variables
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
@@ -196,6 +200,10 @@ public class ProfileSettingsActivity extends AppCompatActivity {
             }
         });
 
+        mProfileImage = (ImageView) findViewById(R.id.profile_image_view);
+        new ImageLoadTask("https://s3.amazonaws.com/chirpprofileimages/" + Account.getAccount().getAccountId(), mProfileImage).execute();
+
+
         // Initializing Toolbar and setting it as the actionbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -292,6 +300,15 @@ public class ProfileSettingsActivity extends AppCompatActivity {
                     fileName, // fileName = Account ID
                     tempFile
             );
+
+//            ExifInterface exif = null;
+//            try {
+//                exif = new ExifInterface(fileName);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//            int rotation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+
 
 
 

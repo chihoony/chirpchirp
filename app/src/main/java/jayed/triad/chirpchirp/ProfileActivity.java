@@ -209,6 +209,8 @@ public class ProfileActivity extends AppCompatActivity
             startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
         } else if (id == R.id.nav_settings) {
             startActivity(new Intent(getApplicationContext(), ProfileSettingsActivity.class));
+        } else if (id == R.id.nav_search) {
+            startActivity(new Intent(getApplicationContext(), SearchActivity.class));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

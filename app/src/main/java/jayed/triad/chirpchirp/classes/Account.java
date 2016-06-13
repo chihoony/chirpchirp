@@ -91,6 +91,10 @@ public class Account {
         return this.user.getDescription();
     }
 
+    public void reset(){
+        this.theAccount = null;
+    }
+
 
     /*
     public String getPassword() {

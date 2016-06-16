@@ -1,44 +1,31 @@
 package jayed.triad.chirpchirp;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.SubMenu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.amazonaws.mobileconnectors.lambdainvoker.LambdaFunctionException;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import jayed.triad.chirpchirp.ProfileActivity;
-import jayed.triad.chirpchirp.ProfileSettingsActivity;
-import jayed.triad.chirpchirp.R;
 import jayed.triad.chirpchirp.classes.Account;
 import jayed.triad.chirpchirp.classes.Chirp;
 import jayed.triad.chirpchirp.classes.Chirps;
@@ -227,6 +214,9 @@ public class MainActivity extends AppCompatActivity {
         ListView list = (ListView) findViewById(R.id.chirpsListView);
         Log.d("chirptest", "3");
         list.setAdapter(adapter);
+
+        ProgressBar mProgress= (ProgressBar) findViewById(R.id.progressBar);
+        mProgress.setVisibility(View.GONE);
     }
 
     private class MyListAdapter extends ArrayAdapter<Chirp> {

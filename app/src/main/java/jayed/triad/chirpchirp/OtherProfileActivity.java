@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.amazonaws.mobileconnectors.lambdainvoker.LambdaFunctionException;
@@ -135,6 +136,9 @@ public class OtherProfileActivity extends AppCompatActivity
         ListView list = (ListView) findViewById(R.id.chirpsListView);
         Log.d("chirptest", "3");
         list.setAdapter(adapter);
+
+        ProgressBar mProgress= (ProgressBar) findViewById(R.id.progressBar);
+        mProgress.setVisibility(View.GONE);
     }
 
 //    private void populateChirplist() {

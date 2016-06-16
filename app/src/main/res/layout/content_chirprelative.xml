@@ -33,7 +33,7 @@
         android:paddingLeft="3dp"
         android:layout_toRightOf="@+id/atsymbol"
         android:textStyle="bold"
-        android:layout_margin="2dp"
+        android:layout_margin="1dp"
         android:textAppearance="?android:attr/textAppearanceLarge"
         />
 

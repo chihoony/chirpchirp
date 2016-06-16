@@ -16,6 +16,8 @@
     android:layout_height="wrap_content"
     android:id="@+id/search_edit_field"
     android:hint="@string/placeholder_search_textfield"
+        android:textColorHint="#bcb3b3b3"
+        android:textSize="15sp"
     android:singleLine="true"
     android:layout_weight="0.68"
         />
@@ -26,6 +28,7 @@
     android:layout_height="wrap_content"
     android:layout_weight="0.2"
     android:text="@string/action_search_button"
+        android:textSize="12sp"
     android:id="@+id/search_button" />
 
 

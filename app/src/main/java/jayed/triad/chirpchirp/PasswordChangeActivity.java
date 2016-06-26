@@ -22,7 +22,6 @@ import jayed.triad.chirpchirp.classes.Hash;
 
 public class PasswordChangeActivity extends Activity {
 
-    private PasswordChangeTask mPasswordChange = null;
     private EditText mCurrentPassword;
     private EditText mNewPassword;
     private EditText mNewPasswordConfirm;

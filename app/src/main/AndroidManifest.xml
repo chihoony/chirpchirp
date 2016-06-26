@@ -67,6 +67,10 @@
             android:name=".PasswordChangeActivity"
             android:theme="@style/AppTheme.CustomTheme"
             android:label="PasswordChangeActivity" />
+        <activity
+            android:name=".DescriptionChangeActivity"
+            android:theme="@style/AppTheme.CustomTheme"
+            android:label="DescriptionChangeActivity" />
 
 
     </application>

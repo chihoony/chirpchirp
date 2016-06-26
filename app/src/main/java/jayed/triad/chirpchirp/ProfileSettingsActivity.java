@@ -73,6 +73,7 @@ public class ProfileSettingsActivity extends AppCompatActivity {
     private ImageButton mProfileImageButton;
     private Button mLogoutButton;
     private Button mChangePasswordButton;
+    private Button mChangeDescriptionButton;
 
     // Storage Permissions variables
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
@@ -293,6 +294,14 @@ public class ProfileSettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getApplicationContext(), PasswordChangeActivity.class));
+            }
+        });
+
+        mChangeDescriptionButton = (Button) findViewById(R.id.EditDescription);
+        mChangeDescriptionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), DescriptionChangeActivity.class));
             }
         });
     }

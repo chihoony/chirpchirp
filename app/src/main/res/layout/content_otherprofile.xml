@@ -48,14 +48,30 @@
 
     </RelativeLayout>
 
-    <Button
-        style="?android:attr/buttonStyleSmall"
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Follow"
-        android:id="@+id/follow_button"
-        android:longClickable="true"
-        android:layout_weight="0.04" />
+        android:id="@+id/followlayout"
+        android:layout_weight="0.04">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Small Text"
+            android:id="@+id/follow_count"
+            android:layout_alignParentTop="true"
+            android:layout_alignEnd="@+id/follow_button" />
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Follow"
+            android:id="@+id/follow_button"
+            android:layout_below="@+id/follow_count"
+            android:layout_centerHorizontal="true" />
+    </RelativeLayout>
 
 
 </LinearLayout>

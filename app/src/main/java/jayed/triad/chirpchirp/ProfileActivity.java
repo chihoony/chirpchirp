@@ -47,6 +47,7 @@ public class ProfileActivity extends AppCompatActivity
     private JsonArray myChirps;
     private TextView mUsername;
     private TextView mDescription;
+    private TextView mFollower;
     private ImageButton mProfileImage;
     private TextView mChirpDescription;
     private Chirps chirps;
@@ -127,6 +128,9 @@ public class ProfileActivity extends AppCompatActivity
 
         mProfileImage = (ImageButton)findViewById(R.id.profileImageButton);
 //        new ImageLoadTask(Account.getAccount().getUser().getProfilePicture(), mProfileImage).execute();
+
+        mFollower = (TextView)findViewById(R.id.followerText);
+        mFollower.setText(String.valueOf(Account.getAccount().getUser().getFollowers().size())  + " Followers");
 
         // TODO: download profile image from S3 and display on the Imagebutton
 

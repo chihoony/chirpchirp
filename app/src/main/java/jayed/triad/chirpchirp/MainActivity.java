@@ -130,8 +130,11 @@ public class MainActivity extends AppCompatActivity {
         //calling sync state is necessay or else your hamburger icon wont show up
         actionBarDrawerToggle.syncState();
 
-        MainTask mChirp = new MainTask();
-        mChirp.execute();
+//        if (Account.getAccount().getUser().getFollowing().size() != 0) {
+            MainTask mChirp = new MainTask();
+            mChirp.execute();
+//        }
+
 
     }
 

@@ -180,4 +180,6 @@
     <string name="placeholder_search_textfield">Search by @name or #hashtag</string>
     <string name="action_search_button">Search</string>
 
+    <string name="follower_count">Search</string>
+
 </resources>

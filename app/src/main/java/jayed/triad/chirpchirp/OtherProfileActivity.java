@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -24,7 +25,9 @@ import android.widget.TextView;
 
 import com.amazonaws.mobileconnectors.lambdainvoker.LambdaFunctionException;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,16 +42,19 @@ import jayed.triad.chirpchirp.classes.User;
  * Created by edwardjihunlee on 16-05-05.
  */
 public class OtherProfileActivity extends AppCompatActivity
-    implements NavigationView.OnNavigationItemSelectedListener{
+        implements NavigationView.OnNavigationItemSelectedListener {
 
     private ChirpsTask mChirps = null;
     private LikeTask mLike = null;
+    private FollowTask mFollowTask = null;
     private User otherUser;
     private String otherUsername;
     private JsonArray otherChirps;
     private TextView mUsername;
     private TextView mDescription;
+    private TextView mFollower;
     private ImageButton mProfileImage;
+    private Button mFollow;
     private TextView mChirpDescription;
     private Chirps chirps;
     private List<Chirp> lochirps;
@@ -60,7 +66,7 @@ public class OtherProfileActivity extends AppCompatActivity
         otherUsername = intent.getStringExtra("key");
         Log.d("otherusernametest", "otherUsername");
         super.onCreate(savedInstanceState);
-        setContentView(R    .layout.activity_otherprofile);
+        setContentView(R.layout.activity_otherprofile);
 //        setContentView(R.layout.content_profile);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -83,6 +89,32 @@ public class OtherProfileActivity extends AppCompatActivity
         lochirps = new ArrayList<Chirp>();
         otherChirps = new JsonArray();
 
+        mFollower = (TextView) findViewById(R.id.follow_count);
+        mFollow = (Button) findViewById(R.id.follow_button);
+//        mFollow.setText("Follow");
+
+        mFollow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                boolean follow;
+                if (mFollow.getText() == "Unfollow") {
+                    mFollower.setText(String.valueOf(Integer.parseInt(mFollower.getText().toString())+ 1) + " Followers");
+                    mFollow.setText("Follow");
+                    follow = true;
+//                } else if (otherUser.parseFollowers(otherUser.getFollowers()).contains(Account.getAccount().getAccountId())) {
+//                    mFollower.setText(String.valueOf(otherUser.getFollowers().size() - 1) + " Followers");
+//                    mFollow.setText("Follow");
+//                    follow = false;
+                } else { // Follow
+                    mFollower.setText(String.valueOf(Integer.parseInt(mFollower.getText().toString())+ 1) + " Followers");
+                    mFollow.setText("Unfollow");
+                    follow = true;
+                }
+                mFollowTask = new FollowTask(otherUser.getUserId(),follow);
+                mFollowTask.execute((Void) null);
+
+            }
+        });
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -107,7 +139,7 @@ public class OtherProfileActivity extends AppCompatActivity
 
         // Initializing Drawer Layout and ActionBarToggle
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close){
+        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
 
             @Override
             public void onDrawerClosed(View drawerView) {
@@ -140,7 +172,7 @@ public class OtherProfileActivity extends AppCompatActivity
         Log.d("chirptest", "3");
         list.setAdapter(adapter);
 
-        ProgressBar mProgress= (ProgressBar) findViewById(R.id.progressBar);
+        ProgressBar mProgress = (ProgressBar) findViewById(R.id.progressBar);
         mProgress.setVisibility(View.GONE);
     }
 
@@ -212,6 +244,7 @@ public class OtherProfileActivity extends AppCompatActivity
         UserTask() {
 
         }
+
         @Override
         protected Boolean doInBackground(Void... param) {
             try {
@@ -219,8 +252,7 @@ public class OtherProfileActivity extends AppCompatActivity
                 otherJson.addProperty("userId", otherUsername);
                 Log.d("otherusernametest", otherJson.toString());
                 otherUser = new User(Factory.getMyInterface().chirpGetUser(otherJson));
-            }
-            catch (LambdaFunctionException lfe) {
+            } catch (LambdaFunctionException lfe) {
                 error = lfe.getDetails().toString();
                 Log.e("otherusernametest", lfe.getDetails(), lfe);
             }
@@ -228,11 +260,12 @@ public class OtherProfileActivity extends AppCompatActivity
             Log.d("otherusernametest", "got other User information");
             return true;
         }
+
         @Override
         protected void onPostExecute(final Boolean success) {
-            if(success) {
+            if (success) {
                 if (lochirps != null)
-                lochirps.clear();
+                    lochirps.clear();
                 mChirps = new ChirpsTask(otherChirps);
                 mChirps.execute();
                 Log.d("test", "attempting to set account Id");
@@ -243,6 +276,13 @@ public class OtherProfileActivity extends AppCompatActivity
                 String description = otherUser.getDescription();
                 mDescription = (TextView) findViewById(R.id.description);
                 mDescription.setText(description);
+
+                if (otherUser.parseFollowers(otherUser.getFollowers()).contains(Account.getAccount().getAccountId())) {
+                    mFollow.setText("Unfollow");
+                } else {
+                    mFollow.setText("Follow");
+                }
+                mFollower.setText(String.valueOf(otherUser.getFollowers().size()) + " Followers");
 
                 mProfileImage = (ImageButton) findViewById(R.id.profileImageButton);
                 new ImageLoadTask(otherUser.getProfilePicture(), mProfileImage).execute();
@@ -279,7 +319,7 @@ public class OtherProfileActivity extends AppCompatActivity
                 chirps = new Chirps(otherChirps);
 //                Log.d("otherusernametest", "trying to parse chirps into account");
                 if (lochirps != null)
-                lochirps.clear();
+                    lochirps.clear();
                 lochirps = chirps.getChirps();
                 // Simulate network access.
             } catch (LambdaFunctionException lfe) {
@@ -396,10 +436,12 @@ public class OtherProfileActivity extends AppCompatActivity
         private String error;
         private int chirpId;
         private boolean likeState;
+
         LikeTask(int id, boolean like) {
             chirpId = id;
             likeState = like;
         }
+
         @Override
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
@@ -413,6 +455,48 @@ public class OtherProfileActivity extends AppCompatActivity
                     Factory.getMyInterface().chirpLike(json);
                 } else {
                     Factory.getMyInterface().chirpUnlike(json);
+                }
+                // Simulate network access.
+            } catch (LambdaFunctionException lfe) {
+                error = lfe.getDetails().toString();
+                Log.e("patest", lfe.getDetails(), lfe);
+                Log.e("patest", lfe.getDetails());
+                Log.e("patest", lfe.getDetails().toString());
+
+            }
+            Log.d("patest", "get my chirps passed");
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+
+        }
+
+    }
+
+    public class FollowTask extends AsyncTask<Void, Void, Boolean> {
+
+        private String error;
+        private String toFollow;
+        private boolean followState;
+        FollowTask(String toFollowId, boolean follow) {
+            toFollow = toFollowId;
+            followState = follow;
+        }
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            // TODO: attempt authentication against a network service.
+
+            try {
+                JsonObject json = new JsonObject();
+                json.addProperty("userId", Account.getAccount().getAccountId());
+                json.addProperty("toFollow", toFollow);
+
+                if (followState) {
+                    Factory.getMyInterface().chirpFollow(json);
+                } else {
+                    Factory.getMyInterface().chirpUnfollow(json);
                 }
                 // Simulate network access.
             } catch (LambdaFunctionException lfe) {

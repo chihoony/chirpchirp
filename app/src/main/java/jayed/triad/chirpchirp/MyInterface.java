@@ -45,7 +45,11 @@ public interface MyInterface {
     @LambdaFunction
     JsonObject chirpUnlike(JsonObject json);
 
+    @LambdaFunction
+    JsonObject chirpFollow(JsonObject json);
 
+    @LambdaFunction
+    JsonObject chirpUnfollow(JsonObject json);
 
 
     /**

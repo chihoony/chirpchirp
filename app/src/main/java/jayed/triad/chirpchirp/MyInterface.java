@@ -39,6 +39,14 @@ public interface MyInterface {
     @LambdaFunction
     JsonArray chirpMain(JsonObject json);
 
+    @LambdaFunction
+    JsonObject chirpLike(JsonObject json);
+
+    @LambdaFunction
+    JsonObject chirpUnlike(JsonObject json);
+
+
+
 
     /**
      * Invoke lambda function "echo". The functionName in the annotation

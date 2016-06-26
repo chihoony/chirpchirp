@@ -51,6 +51,12 @@ public interface MyInterface {
     @LambdaFunction
     JsonObject chirpChangeDescription(JsonObject json);
 
+    @LambdaFunction
+    JsonObject chirpFollow(JsonObject json);
+
+    @LambdaFunction
+    JsonObject chirpUnfollow(JsonObject json);
+
 
     /**
      * Invoke lambda function "echo". The functionName in the annotation

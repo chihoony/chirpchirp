@@ -39,6 +39,8 @@ public interface MyInterface {
     @LambdaFunction
     JsonArray chirpMain(JsonObject json);
 
+    @LambdaFunction
+    JsonObject chirpChangePassword(JsonObject json);
 
     /**
      * Invoke lambda function "echo". The functionName in the annotation

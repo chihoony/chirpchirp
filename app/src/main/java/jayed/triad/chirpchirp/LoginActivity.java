@@ -30,6 +30,7 @@ import com.google.gson.JsonObject;
 import java.util.List;
 
 import jayed.triad.chirpchirp.classes.Account;
+import jayed.triad.chirpchirp.classes.Hash;
 
 /**
  * A login screen that offers login via user/password.
@@ -127,7 +128,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         // Store values at the time of the login attempt.
         String user = mUserView.getText().toString();
-        String password = mPasswordView.getText().toString();
+        String password = Hash.getMD5Hash(mPasswordView.getText().toString());
 
         boolean cancel = false;
         View focusView = null;
@@ -282,10 +283,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             try {
                 JsonObject json = new JsonObject();
                 //TODO: THIS IS FOR TESTING ONLY, SO REMOVE THE SAMPLE1 AND 1234 PASSWORD
-//                json.addProperty("userId", mUser);
-//                json.addProperty("password", mPassword);
-                json.addProperty("userId", "sample1");
-                json.addProperty("password", "1234");
+                json.addProperty("userId", mUser);
+                json.addProperty("password", mPassword);
+//                json.addProperty("userId", "sample1");
+//                json.addProperty("password", "1234");
                 JsonObject response = Factory.getMyInterface().chirpLogin(json);
                 Log.d("test", "login working");
                 Log.d("test", response.toString());

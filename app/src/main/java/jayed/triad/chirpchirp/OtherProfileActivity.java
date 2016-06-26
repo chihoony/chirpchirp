@@ -95,9 +95,9 @@ public class OtherProfileActivity extends AppCompatActivity
 //        String description = otherUser.getDescription();
 //        mDescription = (TextView)findViewById(R.id.description);
 //        mDescription.setText(description);
-//
+////
 //        mProfileImage = (ImageButton)findViewById(R.id.profileImageButton);
-//        new ImageLoadTask(otherUser.getProfilePicture(), mProfileImage).execute();
+//        new ImageLoadTask("https://s3.amazonaws.com/chirpprofileimages/" + otherUsername, mProfileImage).execute();
 
 //      populateChirplist();
         UserTask mUserTask = new UserTask();
@@ -245,7 +245,7 @@ public class OtherProfileActivity extends AppCompatActivity
                 mDescription.setText(description);
 
                 mProfileImage = (ImageButton) findViewById(R.id.profileImageButton);
-                new ImageLoadTask(otherUser.getProfilePicture(), mProfileImage).execute();
+                new ImageLoadTask("https://s3.amazonaws.com/chirpprofileimages/" + otherUsername, mProfileImage).execute();
             }
         }
     }

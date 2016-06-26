@@ -37,6 +37,13 @@ import java.util.List;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
+// import for hashing (MD5)
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
+import jayed.triad.chirpchirp.classes.Hash;
+
 /**
  * A login screen that offers login via email/password.
  */
@@ -163,7 +170,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
         // Store values at the time of the login attempt.
         String user = mUsernameView.getText().toString();
         String email = mEmailView.getText().toString();
-        String password = mPasswordView.getText().toString();
+        String password = Hash.getMD5Hash(mPasswordView.getText().toString());
 
         boolean cancel = false;
         View focusView = null;

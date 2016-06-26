@@ -44,7 +44,7 @@
 
         <ImageButton
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="200dip"
             android:id="@+id/profile_image_view"
             android:layout_alignWithParentIfMissing="false"
             android:src="@mipmap/ic_launcher"
@@ -71,13 +71,29 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="Edit your profile Description"
+            android:id="@+id/EditDescription"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="30dp" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Don&apos;t like your password anymore?"
+            android:id="@+id/password_change"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="30dp" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
 
             android:text="Do you want to logout? We will miss you"
             android:id="@+id/logout_button"
-            android:layout_gravity="center_horizontal|bottom"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="39dp" />
+            android:layout_marginBottom="39dp"
+            android:layout_gravity="center_horizontal" />
 
     </LinearLayout>
 

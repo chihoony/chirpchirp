@@ -27,6 +27,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -71,6 +72,8 @@ public class ProfileSettingsActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private ImageButton mProfileImageButton;
     private Button mLogoutButton;
+    private Button mChangePasswordButton;
+    private Button mChangeDescriptionButton;
 
     // Storage Permissions variables
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
@@ -286,6 +289,21 @@ public class ProfileSettingsActivity extends AppCompatActivity {
         //calling sync state is necessay or else your hamburger icon wont show up
         actionBarDrawerToggle.syncState();
 
+        mChangePasswordButton = (Button) findViewById(R.id.password_change);
+        mChangePasswordButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), PasswordChangeActivity.class));
+            }
+        });
+
+        mChangeDescriptionButton = (Button) findViewById(R.id.EditDescription);
+        mChangeDescriptionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), DescriptionChangeActivity.class));
+            }
+        });
     }
 
     @Override

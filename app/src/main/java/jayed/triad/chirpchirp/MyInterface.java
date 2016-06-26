@@ -45,7 +45,11 @@ public interface MyInterface {
     @LambdaFunction
     JsonObject chirpUnlike(JsonObject json);
 
+    @LambdaFunction
+    JsonObject chirpChangePassword(JsonObject json);
 
+    @LambdaFunction
+    JsonObject chirpChangeDescription(JsonObject json);
 
 
     /**

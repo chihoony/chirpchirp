@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -28,6 +29,7 @@ import com.google.gson.JsonObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import jayed.triad.chirpchirp.classes.Account;
 import jayed.triad.chirpchirp.classes.Chirp;
 import jayed.triad.chirpchirp.classes.Chirps;
 import jayed.triad.chirpchirp.classes.ImageLoadTask;
@@ -40,6 +42,7 @@ public class OtherProfileActivity extends AppCompatActivity
     implements NavigationView.OnNavigationItemSelectedListener{
 
     private ChirpsTask mChirps = null;
+    private LikeTask mLike = null;
     private User otherUser;
     private String otherUsername;
     private JsonArray otherChirps;
@@ -343,16 +346,91 @@ public class OtherProfileActivity extends AppCompatActivity
             chirpTimeStamp.setText(currentChirp.getTimePosted());
             Log.d("chirptest", currentChirp.getTimePosted());
 
-            TextView chirpLikeCount = (TextView) itemView.findViewById(R.id.likecount);
+            final TextView chirpLikeCount = (TextView) itemView.findViewById(R.id.likecount);
             if (!currentChirp.getLikeChirpers().isEmpty())
                 chirpLikeCount.setText(String.valueOf(currentChirp.getLikeChirpers().size()));
+
+            else chirpLikeCount.setText(String.valueOf(0));
 
             TextView chirprechirp = (TextView) itemView.findViewById(R.id.rechirp);
             if (currentChirp.getReChirpId() != 0) {
                 chirprechirp.setVisibility(View.VISIBLE);
             }
 
+            final ImageView likeButton = (ImageView) itemView.findViewById(R.id.likebutton);
+            if (currentChirp.getLikeChirpers().contains(Account.getAccount().getAccountId())) {
+                likeButton.setImageResource(R.mipmap.likedheart);
+            } else {
+                likeButton.setImageResource(R.mipmap.unlikedheart);
+            }
+
+            likeButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+//                        if ()
+                    boolean toLike;
+//                        if (!currentChirp.getLikeChirpers().isEmpty())
+//                        Log.d("like", "1" + currentChirp.getLikeChirpers().toString());
+                    if (currentChirp.getLikeChirpers().contains(Account.getAccount().getAccountId())) {
+                        likeButton.setImageResource(R.mipmap.unlikedheart);
+                        currentChirp.getLikeChirpers().remove(Account.getAccount().getAccountId());
+                        toLike = false;
+                    } else {
+                        likeButton.setImageResource(R.mipmap.likedheart);
+                        currentChirp.getLikeChirpers().add(Account.getAccount().getAccountId());
+                        toLike = true;
+                    }
+//                        if (!currentChirp.getLikeChirpers().isEmpty())
+//                        Log.d("like", "2" + currentChirp.getLikeChirpers().toString());
+                    chirpLikeCount.setText(String.valueOf(currentChirp.getLikeChirpers().size()));
+                    mLike = new LikeTask(currentChirp.getChirpId(), toLike);
+                    mLike.execute((Void) null);
+                }
+            });
+
             return itemView;
         }
     }
+
+    public class LikeTask extends AsyncTask<Void, Void, Boolean> {
+
+        private String error;
+        private int chirpId;
+        private boolean likeState;
+        LikeTask(int id, boolean like) {
+            chirpId = id;
+            likeState = like;
+        }
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            // TODO: attempt authentication against a network service.
+
+            try {
+                JsonObject json = new JsonObject();
+                json.addProperty("userId", Account.getAccount().getAccountId());
+                json.addProperty("chirpId", chirpId);
+
+                if (likeState) {
+                    Factory.getMyInterface().chirpLike(json);
+                } else {
+                    Factory.getMyInterface().chirpUnlike(json);
+                }
+                // Simulate network access.
+            } catch (LambdaFunctionException lfe) {
+                error = lfe.getDetails().toString();
+                Log.e("patest", lfe.getDetails(), lfe);
+                Log.e("patest", lfe.getDetails());
+                Log.e("patest", lfe.getDetails().toString());
+
+            }
+            Log.d("patest", "get my chirps passed");
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+
+        }
+
+    }
 }
+

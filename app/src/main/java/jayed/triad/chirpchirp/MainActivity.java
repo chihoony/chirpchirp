@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -16,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -36,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private NavigationView navigationView;
     private DrawerLayout drawerLayout;
+    private LikeTask mLike = null;
 
     private MainTask mMainTask = null;
 
@@ -53,6 +56,17 @@ public class MainActivity extends AppCompatActivity {
 
         //Initializing NavigationView
         navigationView = (NavigationView) findViewById(R.id.nav_view);
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+                Log.d("otherusernametest", "hello");
+                startActivity(new Intent(getApplicationContext(), PostChirpActivity.class));
+            }
+        });
 
         //Setting Navigation View Item Selected Listener to handle the item click of the navigation menu
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -266,16 +280,90 @@ public class MainActivity extends AppCompatActivity {
             chirpTimeStamp.setText(currentChirp.getTimePosted());
             Log.d("chirptest", currentChirp.getTimePosted());
 
-            TextView chirpLikeCount = (TextView) itemView.findViewById(R.id.likecount);
+            final TextView chirpLikeCount = (TextView) itemView.findViewById(R.id.likecount);
             if (!currentChirp.getLikeChirpers().isEmpty())
                 chirpLikeCount.setText(String.valueOf(currentChirp.getLikeChirpers().size()));
+
+            else chirpLikeCount.setText(String.valueOf(0));
 
             TextView chirprechirp = (TextView) itemView.findViewById(R.id.rechirp);
             if (currentChirp.getReChirpId() != 0) {
                 chirprechirp.setVisibility(View.VISIBLE);
             }
+
+            final ImageView likeButton = (ImageView) itemView.findViewById(R.id.likebutton);
+            if (currentChirp.getLikeChirpers().contains(Account.getAccount().getAccountId())) {
+                likeButton.setImageResource(R.mipmap.likedheart);
+            } else {
+                likeButton.setImageResource(R.mipmap.unlikedheart);
+            }
+
+            likeButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+//                        if ()
+                    boolean toLike;
+//                        if (!currentChirp.getLikeChirpers().isEmpty())
+//                        Log.d("like", "1" + currentChirp.getLikeChirpers().toString());
+                    if (currentChirp.getLikeChirpers().contains(Account.getAccount().getAccountId())) {
+                        likeButton.setImageResource(R.mipmap.unlikedheart);
+                        currentChirp.getLikeChirpers().remove(Account.getAccount().getAccountId());
+                        toLike = false;
+                    } else {
+                        likeButton.setImageResource(R.mipmap.likedheart);
+                        currentChirp.getLikeChirpers().add(Account.getAccount().getAccountId());
+                        toLike = true;
+                    }
+//                        if (!currentChirp.getLikeChirpers().isEmpty())
+//                        Log.d("like", "2" + currentChirp.getLikeChirpers().toString());
+                    chirpLikeCount.setText(String.valueOf(currentChirp.getLikeChirpers().size()));
+                    mLike = new LikeTask(currentChirp.getChirpId(), toLike);
+                    mLike.execute((Void) null);
+                }
+            });
+
             return itemView;
         }
     }
 
+    public class LikeTask extends AsyncTask<Void, Void, Boolean> {
+
+        private String error;
+        private int chirpId;
+        private boolean likeState;
+        LikeTask(int id, boolean like) {
+            chirpId = id;
+            likeState = like;
+        }
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            // TODO: attempt authentication against a network service.
+
+            try {
+                JsonObject json = new JsonObject();
+                json.addProperty("userId", Account.getAccount().getAccountId());
+                json.addProperty("chirpId", chirpId);
+
+                if (likeState) {
+                    Factory.getMyInterface().chirpLike(json);
+                } else {
+                    Factory.getMyInterface().chirpUnlike(json);
+                }
+                // Simulate network access.
+            } catch (LambdaFunctionException lfe) {
+                error = lfe.getDetails().toString();
+                Log.e("patest", lfe.getDetails(), lfe);
+                Log.e("patest", lfe.getDetails());
+                Log.e("patest", lfe.getDetails().toString());
+
+            }
+            Log.d("patest", "get my chirps passed");
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+
+        }
+
+    }
 }

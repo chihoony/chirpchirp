@@ -65,6 +65,12 @@ public class Chirp {
         setTimePosted(json.get("postDate").getAsString());
         else setTimePosted(null);
     }
+    public Chirp(String username, String description, String NOW){
+        this.userId = username;
+        this.chirp = description;
+        this.timePosted = NOW;
+        this.likeChirpers = null;
+    }
 
 
     public Chirp(String userId, String content) {

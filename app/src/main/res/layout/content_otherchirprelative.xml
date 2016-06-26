@@ -41,6 +41,15 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/rechirp"
+        android:textStyle="italic"
+        android:layout_toRightOf="@+id/chirpusername"
+        android:text="rechirp"
+        android:visibility="gone"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:id="@+id/chirpDescription"
         android:text="chirpdescription placeholder"
         android:layout_marginBottom="3dp"
@@ -48,13 +57,40 @@
         android:layout_alignStart="@+id/chirpusername"
         android:textAppearance="?android:attr/textAppearanceMedium"/>
 
-    <TextView
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/chirptimeposted"
-        android:text="chirpDATE 1111/11/11 with time"
-        android:textStyle="italic"
-        android:layout_below="@+id/chirpDescription"
-        android:layout_alignStart="@+id/chirpDescription"
-        android:textAppearance="?android:attr/textAppearanceSmall"/>
+        android:layout_alignStart="@id/chirpDescription"
+        android:layout_below="@id/chirpDescription">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/chirptimeposted"
+            android:text="chirpDATE 1111/11/11 with time"
+            android:textStyle="italic"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:gravity="center_vertical|end"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical|end"
+            android:id="@+id/likebutton"
+            android:src="@mipmap/unlikedheart"
+            android:background="#00ffffff"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="0"
+            android:id="@+id/likecount"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@+id/likebutton" />
+    </RelativeLayout>
 </RelativeLayout>

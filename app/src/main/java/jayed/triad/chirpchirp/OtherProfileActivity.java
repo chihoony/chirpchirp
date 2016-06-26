@@ -57,7 +57,7 @@ public class OtherProfileActivity extends AppCompatActivity
         otherUsername = intent.getStringExtra("key");
         Log.d("otherusernametest", "otherUsername");
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
+        setContentView(R    .layout.activity_otherprofile);
 //        setContentView(R.layout.content_profile);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -194,6 +194,8 @@ public class OtherProfileActivity extends AppCompatActivity
             startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
         } else if (id == R.id.nav_settings) {
             startActivity(new Intent(getApplicationContext(), ProfileSettingsActivity.class));
+        } else if (id == R.id.nav_search) {
+            startActivity(new Intent(getApplicationContext(), SearchActivity.class));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -340,6 +342,16 @@ public class OtherProfileActivity extends AppCompatActivity
             TextView chirpTimeStamp = (TextView) itemView.findViewById(R.id.chirptimeposted);
             chirpTimeStamp.setText(currentChirp.getTimePosted());
             Log.d("chirptest", currentChirp.getTimePosted());
+
+            TextView chirpLikeCount = (TextView) itemView.findViewById(R.id.likecount);
+            if (!currentChirp.getLikeChirpers().isEmpty())
+                chirpLikeCount.setText(String.valueOf(currentChirp.getLikeChirpers().size()));
+
+            TextView chirprechirp = (TextView) itemView.findViewById(R.id.rechirp);
+            if (currentChirp.getReChirpId() != 0) {
+                chirprechirp.setVisibility(View.VISIBLE);
+            }
+
             return itemView;
         }
     }

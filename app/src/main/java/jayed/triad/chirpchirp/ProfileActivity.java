@@ -283,6 +283,7 @@ public class ProfileActivity extends AppCompatActivity
         public View getView(int position, View convertView, ViewGroup parent) {
             // Make sure we have a view to work with (may have been given null)
             View itemView = convertView;
+
             if (itemView == null) {
                 itemView = getLayoutInflater().inflate(R.layout.content_chirprelative, parent, false);
             }
@@ -322,6 +323,10 @@ public class ProfileActivity extends AppCompatActivity
             if (!currentChirp.getLikeChirpers().isEmpty())
             chirpLikeCount.setText(String.valueOf(currentChirp.getLikeChirpers().size()));
 
+            TextView chirprechirp = (TextView) itemView.findViewById(R.id.rechirp);
+            if (currentChirp.getReChirpId() != 0) {
+                chirprechirp.setVisibility(View.VISIBLE);
+            }
             return itemView;
         }
     }

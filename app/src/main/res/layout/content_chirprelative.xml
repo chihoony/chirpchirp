@@ -40,6 +40,15 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/rechirp"
+        android:textStyle="italic"
+        android:layout_toRightOf="@+id/chirpusername"
+        android:text="rechirp"
+        android:visibility="gone"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:id="@+id/chirpDescription"
         android:text="chirpdescription placeholder"
         android:layout_marginBottom="3dp"

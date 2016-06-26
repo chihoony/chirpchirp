@@ -261,6 +261,19 @@ public class MainActivity extends AppCompatActivity {
             // ChirpTimeStamp:
 //            TextView chirpTimeStamp = (TextView) itemView.findViewById(R.id.chirpdate);
 //            chirpTimeStamp.setText(currentChirp.getTimePosted().toString());
+
+            TextView chirpTimeStamp = (TextView) itemView.findViewById(R.id.chirptimeposted);
+            chirpTimeStamp.setText(currentChirp.getTimePosted());
+            Log.d("chirptest", currentChirp.getTimePosted());
+
+            TextView chirpLikeCount = (TextView) itemView.findViewById(R.id.likecount);
+            if (!currentChirp.getLikeChirpers().isEmpty())
+                chirpLikeCount.setText(String.valueOf(currentChirp.getLikeChirpers().size()));
+
+            TextView chirprechirp = (TextView) itemView.findViewById(R.id.rechirp);
+            if (currentChirp.getReChirpId() != 0) {
+                chirprechirp.setVisibility(View.VISIBLE);
+            }
             return itemView;
         }
     }

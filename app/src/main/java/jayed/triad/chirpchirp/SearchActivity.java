@@ -1,6 +1,5 @@
 package jayed.triad.chirpchirp;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -10,7 +9,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
@@ -24,9 +22,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.amazonaws.mobileconnectors.lambdainvoker.LambdaFunctionException;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
@@ -36,7 +32,6 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import jayed.triad.chirpchirp.classes.Account;
 import jayed.triad.chirpchirp.classes.Chirp;
 import jayed.triad.chirpchirp.classes.Chirps;
 

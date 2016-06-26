@@ -59,6 +59,8 @@ public class OtherProfileActivity extends AppCompatActivity
     private Chirps chirps;
     private List<Chirp> lochirps;
     private DrawerLayout drawerLayout;
+    private int followCount;
+    private int unfollowCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,33 +90,6 @@ public class OtherProfileActivity extends AppCompatActivity
 
         lochirps = new ArrayList<Chirp>();
         otherChirps = new JsonArray();
-
-        mFollower = (TextView) findViewById(R.id.follow_count);
-        mFollow = (Button) findViewById(R.id.follow_button);
-//        mFollow.setText("Follow");
-
-        mFollow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                boolean follow;
-                if (mFollow.getText() == "Unfollow") {
-                    mFollower.setText(String.valueOf(Integer.parseInt(mFollower.getText().toString())+ 1) + " Followers");
-                    mFollow.setText("Follow");
-                    follow = true;
-//                } else if (otherUser.parseFollowers(otherUser.getFollowers()).contains(Account.getAccount().getAccountId())) {
-//                    mFollower.setText(String.valueOf(otherUser.getFollowers().size() - 1) + " Followers");
-//                    mFollow.setText("Follow");
-//                    follow = false;
-                } else { // Follow
-                    mFollower.setText(String.valueOf(Integer.parseInt(mFollower.getText().toString())+ 1) + " Followers");
-                    mFollow.setText("Unfollow");
-                    follow = true;
-                }
-                mFollowTask = new FollowTask(otherUser.getUserId(),follow);
-                mFollowTask.execute((Void) null);
-
-            }
-        });
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -161,6 +136,48 @@ public class OtherProfileActivity extends AppCompatActivity
         //calling sync state is necessay or else your hamburger icon wont show up
         actionBarDrawerToggle.syncState();
 
+        mFollower = (TextView) findViewById(R.id.follow_count);
+        mFollow = (Button) findViewById(R.id.follow_button);
+//        mFollow.setText("Follow");
+
+//        if (Account.getAccount().getUser().followingList.contains(otherUser.getUserId())){
+//            mFollow.setText("Unfollow");
+//            followCount = otherUser.getFollowers().size();
+//            unfollowCount = otherUser.getFollowers().size() - 1;
+//        } else {
+//            mFollow.setText("Follow");
+//            followCount = otherUser.getFollowers().size() + 1;
+//            unfollowCount = otherUser.getFollowers().size();
+//        }
+
+        mFollow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                boolean follow;
+                if (mFollow.getText() == "Unfollow") {
+//                    mFollower.setText(String.valueOf(otherUser.followerList.size()) + " Followers");
+                    mFollower.setText(String.valueOf(unfollowCount) + " Followers");
+                    Account.getAccount().getUser().followingList.remove(otherUser.getUserId());
+                    otherUser.followerList.remove(Account.getAccount().getAccountId());
+                    mFollow.setText("Follow");
+                    follow = false;
+//                } else if (otherUser.parseFollowers(otherUser.getFollowers()).contains(Account.getAccount().getAccountId())) {
+//                    mFollower.setText(String.valueOf(otherUser.getFollowers().size() - 1) + " Followers");
+//                    mFollow.setText("Follow");
+//                    follow = false;
+                } else { // Follow
+//                    mFollower.setText(String.valueOf(otherUser.followerList.size()) + " Followers");
+                    mFollower.setText(String.valueOf(followCount) + " Followers");
+                    Account.getAccount().getUser().followingList.add(otherUser.getUserId());
+                    otherUser.followerList.add(Account.getAccount().getAccountId());
+                    mFollow.setText("Unfollow");
+                    follow = true;
+                }
+                mFollowTask = new FollowTask(otherUser.getUserId(),follow);
+                mFollowTask.execute((Void) null);
+
+            }
+        });
 
     }
 
@@ -276,12 +293,18 @@ public class OtherProfileActivity extends AppCompatActivity
                 String description = otherUser.getDescription();
                 mDescription = (TextView) findViewById(R.id.description);
                 mDescription.setText(description);
-
-                if (otherUser.parseFollowers(otherUser.getFollowers()).contains(Account.getAccount().getAccountId())) {
+//                if (otherUser.parseFollowing().contains(Account.getAccount().getAccountId())) {
+//                if (Account.getAccount().getUser().parseFollowing().contains(otherUsername)){
+                if (Account.getAccount().getUser().followingList.contains(otherUser.getUserId())){
                     mFollow.setText("Unfollow");
+                    followCount = otherUser.getFollowers().size();
+                    unfollowCount = otherUser.getFollowers().size() - 1;
                 } else {
                     mFollow.setText("Follow");
+                    followCount = otherUser.getFollowers().size() + 1;
+                    unfollowCount = otherUser.getFollowers().size();
                 }
+
                 mFollower.setText(String.valueOf(otherUser.getFollowers().size()) + " Followers");
 
                 mProfileImage = (ImageButton) findViewById(R.id.profileImageButton);

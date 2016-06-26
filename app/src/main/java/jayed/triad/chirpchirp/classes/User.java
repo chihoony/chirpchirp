@@ -6,6 +6,7 @@ import android.util.Log;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -33,6 +34,9 @@ public class User {
     private JsonArray following; //store as list of gson array of userId
     private JsonArray followers; //store as list of gson array of userId
     private JsonArray likedChirps; //store as list of gson array of userId
+    public List<String> followingList;
+    public List<String> followerList;
+
 
     public User(JsonObject jsonObject) {
         setUserId(jsonObject.getAsJsonObject("Item").get("userId").toString());
@@ -45,6 +49,8 @@ public class User {
         setFollowing(jsonObject.getAsJsonObject("Item").getAsJsonArray("following"));
         setFollowers(jsonObject.getAsJsonObject("Item").getAsJsonArray("followers"));
         setLikedChirps(jsonObject.getAsJsonObject("Item").getAsJsonArray("likedChirps"));
+        followingList = parseFollowing();
+        followerList = parseFollowers();;
         //setChirps(jsonObject.getAsJsonObject("Item").get("chirps").getAsJsonArray());
 //        setChirps(array1);
 //        setChirps(array2);
@@ -141,18 +147,34 @@ public class User {
 
 // PARSERS BELOW
 
-    public List<String> parseFollowers(JsonArray followers) {
+//    public List<String> parseFollowers(JsonArray followers) {
+//        List<String> listofFollowers = new ArrayList<String>();
+//        for (JsonElement item : followers) {
+//            listofFollowers.add(item.toString());
+//        }
+//        return listofFollowers;
+//    }
+
+    public List<String> parseFollowers() {
         List<String> listofFollowers = new ArrayList<String>();
         for (JsonElement item : followers) {
-            listofFollowers.add(item.toString());
+            listofFollowers.add(removeQuotes(item.toString()));
         }
         return listofFollowers;
     }
 
-    public List<String> parseFollowing(JsonArray following) {
+//    public List<String> parseFollowing(JsonArray following) {
+//        List<String> listofFollowing = new ArrayList<String>();
+//        for (JsonElement item : following) {
+//            listofFollowing.add(item.toString());
+//        }
+//        return listofFollowing;
+//    }
+
+    public List<String> parseFollowing() {
         List<String> listofFollowing = new ArrayList<String>();
-        for (JsonElement item : following) {
-            listofFollowing.add(item.toString());
+        for (JsonElement item : this.following) {
+            listofFollowing.add(removeQuotes(item.toString()));
         }
         return listofFollowing;
     }

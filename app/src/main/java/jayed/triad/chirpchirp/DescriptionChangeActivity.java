@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
@@ -14,10 +13,7 @@ import android.widget.EditText;
 import com.amazonaws.mobileconnectors.lambdainvoker.LambdaFunctionException;
 import com.google.gson.JsonObject;
 
-import org.w3c.dom.Text;
-
 import jayed.triad.chirpchirp.classes.Account;
-import jayed.triad.chirpchirp.classes.Hash;
 
 
 public class DescriptionChangeActivity extends Activity {
@@ -30,7 +26,7 @@ public class DescriptionChangeActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.content_passwordchange);
+        setContentView(R.layout.content_descriptionchange);
 
         mNewDescription = (EditText) findViewById(R.id.NewDescription);
 
@@ -47,9 +43,8 @@ public class DescriptionChangeActivity extends Activity {
         b.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // change the password with hashed version
-                String description = mNewDescription.getText().toString();
-                changeDescription(description);
+                    String description = mNewDescription.getText().toString();
+                    changeDescription(description);
 
             }
         });
